@@ -1,0 +1,14 @@
+{
+  "name": "genba-mahjong-public-beta",
+  "version": "0.1.0-beta.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "serve": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
