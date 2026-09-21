@@ -98,6 +98,7 @@ const AI_CATEGORIES = new Set([
   "AI_ADVISORY",
 ]);
 const ALL_CATEGORIES = new Set(SEMANTIC_CATEGORIES);
+const CANONICAL_RESOURCE_ID = /^[a-z0-9][a-z0-9._:/-]{0,255}$/;
 const EVENT_TYPES = new Set([
   "RECORD_ADDED",
   "COUNTEREXAMPLE_RECORDED",
@@ -165,13 +166,15 @@ const mergeCounts = (left, right) => {
 
 const normalizeResourceValue = (value) => {
   const values = Array.isArray(value) ? value : [value];
-  if (
-    values.length === 0 ||
-    values.some((item) => !isNonEmptyText(item, 256) || item.trim().toUpperCase() === "UNKNOWN")
-  ) {
-    return null;
-  }
-  return [...new Set(values.map((item) => item.trim()))].sort();
+  if (values.length === 0) return null;
+  const canonical = values.map((item) => {
+    if (!isNonEmptyText(item, 256)) return null;
+    const normalized = item.trim().normalize("NFKC").toLowerCase();
+    if (normalized === "unknown" || !CANONICAL_RESOURCE_ID.test(normalized)) return null;
+    return normalized;
+  });
+  if (canonical.some((item) => item === null)) return null;
+  return [...new Set(canonical)].sort();
 };
 
 const normalizeResources = (resources) => {
@@ -312,6 +315,11 @@ const applyEvent = (state, event) => {
       break;
     case "WORKER_PROPOSAL_RECORDED": {
       const proposal = clone(payload.proposal);
+      const canonicalResources = normalizeResources(proposal.resources);
+      if (stableStringify(proposal.resources) !== stableStringify(canonicalResources)) {
+        throw new Error("RESOURCE_ID_EVENT_NOT_CANONICAL");
+      }
+      proposal.resources = canonicalResources;
       const existing = state.proposals.findIndex(
         (item) => item.workerId === proposal.workerId,
       );
@@ -368,10 +376,34 @@ const applyEvent = (state, event) => {
       pushBounded(state.human.judgments, clone(payload.judgment), capacity);
       state.aggregates.humanJudgmentsSeen += 1;
       break;
-    case "HUMAN_ACTION_RECORDED":
-      pushBounded(state.human.actions, clone(payload.action), capacity);
+    case "HUMAN_ACTION_RECORDED": {
+      const action = clone(payload.action);
+      if (
+        !isObject(action) ||
+        !isNonEmptyText(action.actionId, 256) ||
+        !isNonEmptyText(action.judgmentId, 256) ||
+        state.human.actions.some(
+          (item) =>
+            item.actionId === action.actionId || item.judgmentId === action.judgmentId,
+        )
+      ) {
+        throw new Error("HUMAN_ACTION_EVENT_DUPLICATE_OR_INVALID");
+      }
+      const judgment = state.human.judgments.find(
+        (item) => item.judgmentId === action.judgmentId,
+      );
+      if (
+        !judgment ||
+        action.action !== "DISCARD" ||
+        action.candidateId !== judgment.candidateId ||
+        action.value !== judgment.candidateId
+      ) {
+        throw new Error("HUMAN_ACTION_EVENT_BINDING_INVALID");
+      }
+      pushBounded(state.human.actions, action, capacity);
       state.aggregates.humanActionsSeen += 1;
       break;
+    }
     case "LOCAL_HOLD_RECORDED":
       pushBounded(state.localHolds, clone(payload.hold), capacity);
       state.aggregates.localHoldsSeen += 1;
@@ -784,6 +816,15 @@ class FixtureEngine {
       (item) => item.judgmentId === command.judgmentId,
     );
     if (!judgment) return this._localHold("HUMAN_ACTION_JUDGMENT_REFERENCE_MISSING");
+    if (
+      this._state.human.actions.some(
+        (item) => item.judgmentId === judgment.judgmentId,
+      )
+    ) {
+      return this._localHold("HUMAN_ACTION_ALREADY_RECORDED", {
+        judgmentId: judgment.judgmentId,
+      });
+    }
     if (command.value.trim() !== judgment.candidateId) {
       return this._localHold("HUMAN_ACTION_CANDIDATE_BINDING_MISMATCH", {
         judgmentCandidateId: judgment.candidateId,
@@ -919,6 +960,17 @@ export const replayReceipt = (receipt) => {
   }
 
   const checkpoint = clone(receipt.checkpoint);
+  const checkpointHuman = checkpoint.state?.human;
+  const checkpointProposals = checkpoint.state?.proposals;
+  const checkpointJudgmentIds = Array.isArray(checkpointHuman?.judgments)
+    ? checkpointHuman.judgments.map((judgment) => judgment?.judgmentId)
+    : [];
+  const checkpointActionIds = Array.isArray(checkpointHuman?.actions)
+    ? checkpointHuman.actions.map((action) => action?.actionId)
+    : [];
+  const checkpointActionJudgments = Array.isArray(checkpointHuman?.actions)
+    ? checkpointHuman.actions.map((action) => action?.judgmentId)
+    : [];
   if (
     checkpoint.state.sessionId !== receipt.sessionId ||
     !isObject(checkpoint.state.settings) ||
@@ -931,7 +983,29 @@ export const replayReceipt = (receipt) => {
       (count) => !Number.isSafeInteger(count) || count < 0,
     ) ||
     Object.values(checkpoint.eventCounts).reduce((sum, count) => sum + count, 0) !==
-      checkpoint.compactedEvents
+      checkpoint.compactedEvents ||
+    !Array.isArray(checkpointHuman?.judgments) ||
+    !Array.isArray(checkpointHuman?.actions) ||
+    !Array.isArray(checkpointProposals) ||
+    checkpointProposals.some(
+      (proposal) =>
+        !isObject(proposal) ||
+        stableStringify(proposal.resources) !==
+          stableStringify(normalizeResources(proposal.resources)),
+    ) ||
+    checkpointJudgmentIds.some((id) => !isNonEmptyText(id, 256)) ||
+    new Set(checkpointJudgmentIds).size !== checkpointJudgmentIds.length ||
+    checkpointActionIds.some((id) => !isNonEmptyText(id, 256)) ||
+    checkpointActionJudgments.some((id) => !isNonEmptyText(id, 256)) ||
+    checkpointHuman.actions.some(
+      (action) =>
+        !isObject(action) ||
+        action.action !== "DISCARD" ||
+        !isNonEmptyText(action.candidateId, 256) ||
+        action.value !== action.candidateId,
+    ) ||
+    new Set(checkpointActionIds).size !== checkpointActionIds.length ||
+    new Set(checkpointActionJudgments).size !== checkpointActionJudgments.length
   ) {
     throw new Error("RECEIPT_CHECKPOINT_INVALID");
   }

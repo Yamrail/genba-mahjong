@@ -220,6 +220,23 @@ test("shared resources defeat independence even without a direct edge", () => {
   delete incomplete.auth;
   propose(unknown, "WORKER-B", "CANDIDATE-X", incomplete);
   assert.equal(unknown.snapshot().consensus.status, "UNKNOWN_HOLD");
+
+  const caseAlias = createEngine({ sessionId: "case-folded-resource-alias" });
+  const aliasLeft = resources("left");
+  const aliasRight = resources("right");
+  aliasLeft.provider = "Shared-Provider";
+  aliasRight.provider = "shared-provider";
+  propose(caseAlias, "WORKER-A", "CANDIDATE-X", aliasLeft);
+  propose(caseAlias, "WORKER-B", "CANDIDATE-X", aliasRight);
+  assert.equal(caseAlias.snapshot().consensus.status, "COMMON_MODE_HOLD");
+  assert.equal(caseAlias.snapshot().consensus.overlaps[0].value, "shared-provider");
+
+  const nonCanonical = createEngine({ sessionId: "non-canonical-resource-id" });
+  propose(nonCanonical, "WORKER-A", "CANDIDATE-X", resources("left"));
+  const ambiguous = resources("right");
+  ambiguous.auth = "shared auth with spaces";
+  propose(nonCanonical, "WORKER-B", "CANDIDATE-X", ambiguous);
+  assert.equal(nonCanonical.snapshot().consensus.status, "UNKNOWN_HOLD");
 });
 
 test("unknown and cyclic controls fail closed into a local HOLD without throwing", () => {
@@ -366,6 +383,17 @@ test("Human judgment and discard are two explicit local records and never canoni
   assert.equal(actionResult.result.authorityScope, "LOCAL_EDUCATIONAL_FIXTURE_ONLY");
   assert.equal(actionResult.result.canonicalEffect, "NONE");
   assert.equal(actionResult.result.canonicalHoldRelease, "NOT_AVAILABLE");
+  const duplicateAction = engine.dispatch({
+    type: "HUMAN_ACTION",
+    actor: "HUMAN",
+    judgmentId: judgmentResult.result.judgmentId,
+    action: "DISCARD",
+    value: "9m",
+    confirm: true,
+  });
+  assert.equal(duplicateAction.status, "LOCAL_HOLD");
+  assert.equal(duplicateAction.reason, "HUMAN_ACTION_ALREADY_RECORDED");
+  assert.equal(engine.snapshot().human.actions.length, 1);
   assert.equal(engine.snapshot().preservedHolds.length, PRESERVED_HOLDS.length);
 });
 
@@ -433,4 +461,78 @@ test("receipt replay rejects removed snapshots and non-monotonic epoch events", 
   rollbackEvent.events[0].payload.previousEpoch = 2;
   rollbackEvent.events[0].payload.nextEpoch = 1;
   assert.throws(() => replayReceipt(rollbackEvent), /AUTHORITY_EPOCH_EVENT_NOT_MONOTONIC/);
+});
+
+test("receipt replay rejects duplicate Human action and non-canonical resource identity", () => {
+  const actionEngine = createEngine({ sessionId: "duplicate-action-replay" });
+  propose(actionEngine, "WORKER-A", "9m", resources("left"));
+  const judgment = actionEngine.dispatch({
+    type: "HUMAN_JUDGMENT",
+    actor: "HUMAN",
+    candidateId: "9m",
+    rationale: "Explicit local teaching judgment.",
+  });
+  actionEngine.dispatch({
+    type: "HUMAN_ACTION",
+    actor: "HUMAN",
+    judgmentId: judgment.result.judgmentId,
+    action: "DISCARD",
+    value: "9m",
+    confirm: true,
+  });
+  const duplicateActionReceipt = actionEngine.exportReceipt();
+  const actionEvent = duplicateActionReceipt.events.at(-1);
+  const duplicate = JSON.parse(JSON.stringify(actionEvent));
+  duplicate.coordinate.sequence += 1;
+  duplicate.coordinate.logicalTick += 1;
+  duplicateActionReceipt.events.push(duplicate);
+  assert.throws(
+    () => replayReceipt(duplicateActionReceipt),
+    /HUMAN_ACTION_EVENT_DUPLICATE_OR_INVALID/,
+  );
+
+  const resourceEngine = createEngine({ sessionId: "resource-event-canonical" });
+  propose(resourceEngine, "WORKER-A", "9m", resources("left"));
+  const nonCanonicalReceipt = resourceEngine.exportReceipt();
+  nonCanonicalReceipt.events[0].payload.proposal.resources.provider = ["Shared-Provider"];
+  assert.throws(
+    () => replayReceipt(nonCanonicalReceipt),
+    /RESOURCE_ID_EVENT_NOT_CANONICAL/,
+  );
+
+  const checkpointEngine = createEngine({
+    sessionId: "checkpoint-invariant-validation",
+    historyCapacity: 2,
+    stateCapacity: 8,
+  });
+  propose(checkpointEngine, "WORKER-A", "9m", resources("left"));
+  const checkpointJudgment = checkpointEngine.dispatch({
+    type: "HUMAN_JUDGMENT",
+    actor: "HUMAN",
+    candidateId: "9m",
+    rationale: "Move Human action into checkpoint state.",
+  });
+  checkpointEngine.dispatch({
+    type: "HUMAN_ACTION",
+    actor: "HUMAN",
+    judgmentId: checkpointJudgment.result.judgmentId,
+    action: "DISCARD",
+    value: "9m",
+    confirm: true,
+  });
+  for (const text of ["checkpoint filler one", "checkpoint filler two"]) {
+    checkpointEngine.dispatch({ type: "ADD_RECORD", actor: "SYSTEM", category: "OBSERVED", text });
+  }
+
+  const duplicateCheckpoint = checkpointEngine.exportReceipt();
+  const duplicatedCheckpointAction = JSON.parse(
+    JSON.stringify(duplicateCheckpoint.checkpoint.state.human.actions[0]),
+  );
+  duplicatedCheckpointAction.actionId = "HA-DUPLICATE-CHECKPOINT";
+  duplicateCheckpoint.checkpoint.state.human.actions.push(duplicatedCheckpointAction);
+  assert.throws(() => replayReceipt(duplicateCheckpoint), /RECEIPT_CHECKPOINT_INVALID/);
+
+  const resourceCheckpoint = checkpointEngine.exportReceipt();
+  resourceCheckpoint.checkpoint.state.proposals[0].resources.provider = ["Shared-Provider"];
+  assert.throws(() => replayReceipt(resourceCheckpoint), /RECEIPT_CHECKPOINT_INVALID/);
 });

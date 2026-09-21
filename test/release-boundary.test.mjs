@@ -50,3 +50,27 @@ test("known HOLD publication is present and cannot be mistaken for GA", async ()
   assert.match(holds, /PUBLIC BETA != GA/);
   assert.match(holds, /LOCAL FIXTURE ACTION != CANONICAL AUTHORITY/);
 });
+
+test("D0023 handoff exposes status, qualified closer and next closure without founder dependence", async () => {
+  const [html, readme, holds, provenance] = await Promise.all([
+    read("index.html"),
+    read("README.md"),
+    read("docs/KNOWN_HOLDS.md"),
+    read("docs/PROVENANCE.md"),
+  ]);
+  const publicText = `${html}\n${readme}\n${holds}\n${provenance}`;
+  for (const marker of [
+    "CLOSED",
+    "OPEN",
+    "UNKNOWN",
+    "HOLD",
+    "Qualified closer",
+    "Next closure point",
+    "FOUNDER CAN DO IT != SYSTEM CAN REPRODUCE IT",
+    "PUBLIC REPO != SELF-SERVICE",
+  ]) {
+    assert.match(publicText, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  }
+  assert.match(html, /AI\/workerはどの行も閉じません/);
+  assert.match(holds, /Human .*Authority/i);
+});

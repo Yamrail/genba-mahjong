@@ -1253,6 +1253,112 @@ progress::-moz-progress-bar {
   font-size: 0.72rem;
 }
 
+.closure-map {
+  margin-top: 1rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  background:
+    linear-gradient(135deg, rgba(140, 184, 255, 0.075), transparent 48%),
+    var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.closure-map__header {
+  display: grid;
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.68fr);
+  gap: 1rem;
+}
+
+.closure-map__header h3 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+}
+
+.closure-map__header > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.handoff-states {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 1.2rem;
+}
+
+.handoff-states article {
+  min-width: 0;
+  padding: 0.85rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+.handoff-states strong,
+.handoff-states span {
+  display: block;
+}
+
+.handoff-states strong {
+  color: var(--amber);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+}
+
+.handoff-states span {
+  margin-top: 0.25rem;
+  color: #c8d4cc;
+  font-size: 0.7rem;
+}
+
+.next-closure-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.next-closure-grid article {
+  min-width: 0;
+  padding: 1rem;
+  background: rgba(5, 14, 10, 0.46);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+.next-closure-grid article > span {
+  color: var(--blue);
+  font-size: 0.61rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.next-closure-grid h4 {
+  margin: 0.4rem 0 0.35rem;
+  font-size: 0.82rem;
+}
+
+.next-closure-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.next-closure-grid p strong {
+  color: var(--green);
+}
+
+.closure-map__boundary {
+  margin: 1rem 0 0;
+  color: var(--amber);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.62rem;
+  overflow-wrap: anywhere;
+}
+
 .why-mahjong {
   margin-top: 1rem;
   background: rgba(255, 255, 255, 0.025);
@@ -1370,6 +1476,10 @@ progress::-moz-progress-bar {
   .hold-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .handoff-states {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -1403,7 +1513,9 @@ progress::-moz-progress-bar {
   }
 
   .section-heading,
-  .history-grid {
+  .history-grid,
+  .closure-map__header,
+  .next-closure-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1443,7 +1555,8 @@ progress::-moz-progress-bar {
 
   .scenario-choices,
   .candidate-grid,
-  .hold-grid {
+  .hold-grid,
+  .handoff-states {
     grid-template-columns: 1fr;
   }
 

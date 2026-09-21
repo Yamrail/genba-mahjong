@@ -140,3 +140,21 @@ test("copy does not claim AI correctness, discard Authority, GA, or HOLD release
   assert.match(html, /正解打牌を判定する戦略judgeではありません/);
   assert.match(html, /canonical HOLDを解除できません/);
 });
+
+test("Public Beta handoff display identifies D0023 state and next-closure routes", async () => {
+  const [html, css] = await Promise.all([read("index.html"), read("styles.css")]);
+
+  assert.match(html, /D0023 \/ FOUNDER-INDEPENDENT HANDOFF/);
+  assert.match(html, /id="closure-map-title"/);
+  assert.match(html, /CLOSED/);
+  assert.match(html, /OPEN/);
+  assert.match(html, /UNKNOWN/);
+  assert.match(html, /HOLD/);
+  assert.match(html, /Qualified mahjong expert \/ Human domain Authority/);
+  assert.match(html, /Integration operator \+ resource owners/);
+  assert.match(html, /Human security \/ qualification Authority/);
+  assert.match(html, /Named Human release \/ legal Authority/);
+  assert.match(html, /NEXT CLOSURE POINT SHOULD BE IDENTIFIABLE/);
+  assert.match(css, /\.next-closure-grid/);
+  assert.match(css, /\.handoff-states/);
+});

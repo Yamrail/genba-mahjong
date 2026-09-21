@@ -70,6 +70,31 @@ provider / auth / cache / dataset / runtime / ruleSource
 Any overlap yields a correlated/common-mode result. Missing metadata yields UNKNOWN/HOLD. Only complete,
 disjoint vectors may be called fixture-independent. Even then, agreement remains advisory.
 
+Synthetic resource IDs use an explicit fixture identity contract: trim, Unicode NFKC normalization,
+ASCII canonical grammar, and lower-case folding. `Shared-Provider` and `shared-provider` therefore
+cannot masquerade as independent resources. Unsupported or ambiguous IDs become missing identity
+metadata and fail closed to UNKNOWN/HOLD. This does not claim to solve real provider aliasing;
+`PB-H05-LIVE-SHARED-RESOURCES` remains HOLD until an owner-controlled resource registry is wired.
+
+## Protection coordination
+
+The UI disables a Human action after it is recorded, but that local indication is not the protection
+boundary. Engine dispatch allows at most one action per `judgmentId`, and replay rejects duplicate
+action use or a candidate-binding mismatch. Thus a direct engine caller cannot bypass the UI and
+double-apply a local discard.
+
+## External handoff
+
+D0023 applies because this is a Public Beta handoff. `README.md` and `docs/KNOWN_HOLDS.md` distinguish
+CLOSED / OPEN / UNKNOWN / HOLD, name the qualified closer and identify the next measurement/procedure.
+The map is an operational route, not a grant of Authority:
+
+```text
+PUBLIC REPO != SELF-SERVICE
+FOUNDER CAN DO IT != SYSTEM CAN REPRODUCE IT
+NEXT CLOSURE POINT SHOULD BE IDENTIFIABLE
+```
+
 ## No hidden escalation
 
 The engine has no method that lets a worker:
@@ -81,4 +106,3 @@ The engine has no method that lets a worker:
 - acquire identity/qualification Authority.
 
 Those transitions require separate Human-facing controls and never close canonical project HOLDs.
-

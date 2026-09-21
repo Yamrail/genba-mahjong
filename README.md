@@ -31,6 +31,26 @@ AI worker役が行うのは、観測整理、仮説、反例、測定提案ま�
 - 長時間sessionでのbounded journalとcheckpoint
 - 明示的なHuman judgment → Human actionの二段階記録
 
+## Handoff status / next closure
+
+D0023のfounder-independent handoff標準に従い、公開repoの存在だけを
+self-service成立とは扱いません。
+
+```text
+FOUNDER CAN DO IT != SYSTEM CAN REPRODUCE IT
+PUBLIC REPO != SELF-SERVICE
+NEXT CLOSURE POINT SHOULD BE IDENTIFIABLE
+```
+
+| State | このPublic Betaでの意味 | Qualified closer / next closure point |
+|---|---|---|
+| `CLOSED` | 決定論的な教育fixture、D0022境界表示、固定commit試験と独立照査の範囲 | 公開receiptでfixed commit・試験・remote readbackを照合する。productionや麻雀正解のclosureではない。 |
+| `OPEN` | 公開教材/benchとしての利用feedbackと反例追加 | operatorが再現手順付きissueを提示し、maintainerが次のfixture deltaとして評価する。Authority移転は起こらない。 |
+| `UNKNOWN` | 麻雀の正解、完全な牌効率・勝率、再利用license | qualified mahjong domain authorityがacceptance corpus/value vectorを定義し、Human legal/product Authorityがlicenseを選択する。 |
+| `HOLD` | real provider、Human identity、canonical HOLD解除、live共有資源、production長時間、実機accessibility、private qualification、GA | 各ownerが[Known HOLDs](docs/KNOWN_HOLDS.md)の測定/手順を完了し、指定Human Authorityが別receiptで閉じる。 |
+
+AI/workerの一致、fixtureの成功、Public Beta公開のいずれも、この表のHuman/domain closureを代行しません。
+
 ## 使い方
 
 1. `観測を追加`、`AI worker候補を生成`、`反例を注入`を試します。

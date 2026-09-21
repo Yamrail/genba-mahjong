@@ -34,6 +34,21 @@ The browser user may explicitly record a local Human judgment and a local Human 
 Those actions are educational-fixture records, not identity proof and not canonical YamRail
 Authority receipts.
 
+Each Human judgment may produce at most one local Human action. UI disabling is not the sole
+protection: the engine and receipt replay must both reject duplicate action use of a judgment.
+
+## D0023 handoff boundary
+
+The Public Beta artifact is an external-adoption trigger for the D0023 founder-independent
+handoff standard. It must make `CLOSED / OPEN / UNKNOWN / HOLD`, the qualified closer and the
+next measurement/procedure reconstructable without founder-only context.
+
+```text
+FOUNDER CAN DO IT != SYSTEM CAN REPRODUCE IT
+PUBLIC REPO != SELF-SERVICE
+NEXT CLOSURE POINT SHOULD BE IDENTIFIABLE
+```
+
 ## D0021 rework acceptance
 
 The Public Beta candidate must independently demonstrate:
@@ -46,6 +61,8 @@ The Public Beta candidate must independently demonstrate:
 6. Long sessions have a bounded retained journal and a replayable checkpoint.
 7. Worker agreement never unlocks Human judgment, discard, HOLD release, or Authority actions.
 8. Rendered state keeps OBSERVED / INFERENCE / HYPOTHESIS / COUNTEREXAMPLE / UNKNOWN / HOLD / HUMAN JUDGMENT / HUMAN AUTHORITY distinct.
+9. Human action is exactly-once per Human judgment in both engine dispatch and receipt replay.
+10. Resource IDs are NFKC/case-folded into a documented canonical identity; invalid identity metadata yields UNKNOWN/HOLD.
 
 ## Preserved HOLDs
 
@@ -62,4 +79,3 @@ The Public Beta candidate must independently demonstrate:
 - UI: semantic projections, Human-only controls, Public Beta disclosure and accessibility.
 - SOL INTEGRATION: cross-workface consistency, tests, fixed commit.
 - INDEPENDENT INSPECTION: read-only review of the fixed commit; no repair Authority.
-
