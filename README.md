@@ -1,3 +1,15 @@
+# 現場麻雀 Phase-01 Rev.4 — 実験版
+
+[ゲームを開く](https://yamrail.github.io/genba-mahjong/) · [YamRail Fuel](https://yamrail.ai/Fuel/model-chat/ja/)
+
+2026-10-23：7月31日のRev.4を基準に復元した卓・手牌・河・三役対話のゲームです。Human表示検収を経て、既存URLに反映しました。チュートリアル／通常モード、任意の手牌選択・打牌、HOLD中の操作を利用できます。外部モデルAPIをゲーム実行中に呼び出しません。
+
+実験的な実装です。牌理・得点・対局規則の完全性を保証するものではありません。チュートリアルの省略履歴が不明なためロンはHOLDです。鳴き・カン、責任払い、対局全体終了規則など未対応範囲を残します。Humanの打牌を助言が強制することはありません。
+
+9月公開の抽象systems-coherence benchは、[固定commitの履歴](https://github.com/Yamrail/genba-mahjong/tree/ea64da581c531db82809197b1d674b21aba47585)に保存しています。以下はその版の説明であり、現在のRev.4ゲームの機能説明ではありません。
+
+---
+
 # 現場麻雀 — Public Beta
 
 現場麻雀は、複数のAI worker・証拠・仮説・反例・UNKNOWN/HOLDを、

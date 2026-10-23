@@ -1,482 +1,570 @@
 <!doctype html>
+<!-- YAMRAIL_MAHJONG_CODEX_CORRECTION_REV13_20260731 -->
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="referrer" content="no-referrer" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'none'; img-src 'self' data:; object-src 'none'; script-src 'self'; style-src 'self'; base-uri 'none'; form-action 'self'"
-    />
-    <meta
-      name="description"
-      content="現場麻雀 Public Beta。AIの観測・仮説・反例と、人間の判断・打牌・Authorityを分離して学ぶ、YamRailの教育用systems-coherence benchです。"
-    />
-    <meta name="color-scheme" content="dark" />
-    <title>現場麻雀 — YamRail Public Beta</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <script type="module" src="./src/app.js"></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">本文へ移動</a>
-
-    <div class="release-rail" role="status" aria-label="公開状態">
-      <span class="release-rail__pulse" aria-hidden="true"></span>
-      <strong>PUBLIC BETA</strong>
-      <span>教材 / systems-coherence bench</span>
-      <span class="release-rail__divider" aria-hidden="true"></span>
-      <strong>GA: HOLD</strong>
-      <span>Real AI / provider: NOT CONNECTED</span>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'; media-src 'none'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>現場麻雀 Phase-01 Rev.4.0</title>
+  <style>
+    :root{--ink:#f4ecd9;--muted:#b8ad95;--panel:#19242a;--panel2:#22322f;--cream:#efe3c4;--gold:#c9963f;--red:#b94f45;--green:#285c47;--blue:#3f5360;--hold:#714d27;--line:#0b0e12}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#10151b;color:var(--ink);font-family:"Yu Gothic","Meiryo",system-ui,sans-serif;letter-spacing:0}body{overflow:auto}.hidden{display:none!important}
+    .mode-gate{min-height:100vh;display:grid;grid-template-rows:auto auto;align-content:center;justify-items:center;gap:24px;padding:clamp(24px,5vw,64px);background:linear-gradient(180deg,rgba(8,11,14,.18),rgba(8,11,14,.84)),url("assets/runtime/office-bg.png") center/cover no-repeat;image-rendering:pixelated}.mode-heading,.mode-buttons{width:min(940px,100%)}.mode-heading{color:#fff;text-shadow:0 3px 0 #07090b}.mode-heading p{margin:0 0 9px;color:#f0c96d;font-weight:800}.mode-heading h1{margin:0;font-size:clamp(2.2rem,6vw,4.8rem);line-height:1}.mode-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mode-button{min-height:122px;border:3px solid var(--line);background:#2b4d40;color:var(--ink);box-shadow:5px 5px 0 #07090b;font-size:clamp(1.05rem,2.4vw,1.7rem);font-weight:800;cursor:pointer}.mode-button.normal{background:#51482a}.mode-button:hover,.mode-button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+    .screen{min-height:100vh;padding:9px;display:grid;grid-template-rows:auto minmax(0,1fr) 252px;gap:8px;background:linear-gradient(180deg,#1b2530,#12181e)}.top-stack{display:grid;gap:7px}header{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:7px 10px;border:2px solid var(--line);background:linear-gradient(180deg,#2f483f,#1d2c29);box-shadow:0 4px 0 #07090b}h1{margin:0;font-size:1.28rem}.meta{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px}.tag{display:inline-flex;align-items:center;min-height:27px;padding:3px 7px;border:2px solid var(--line);background:#25362f;color:var(--ink);box-shadow:2px 2px 0 #07090b;font-size:.72rem}.tag.obs{background:var(--green)}.tag.unk{background:var(--blue)}.tag.hold{background:var(--hold)}.audio-controls{display:flex;align-items:center;gap:6px}.bgm-toggle{display:inline-flex;align-items:center;gap:6px;min-height:31px;padding:3px 8px;border:2px solid var(--line);background:#25362f;color:var(--ink);box-shadow:2px 2px 0 #07090b;cursor:pointer;font-size:.75rem;font-weight:800}.bgm-toggle input{width:16px;height:16px;margin:0;accent-color:var(--gold)}.mode-return{min-height:31px;padding:3px 8px;border:2px solid var(--line);background:#252e35;color:var(--ink);box-shadow:2px 2px 0 #07090b;cursor:pointer;font-weight:700}
+    .main{display:grid;grid-template-columns:minmax(0,23fr) minmax(0,48fr) minmax(0,29fr);gap:8px;min-height:0}.panel{min-width:0;border:2px solid var(--line);background:var(--panel);box-shadow:4px 4px 0 #07090b;overflow:hidden}.panel-title{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:6px 8px;border-bottom:2px solid var(--line);background:#2d463d;font-size:.84rem;font-weight:800}.panel-body{padding:8px}.left{display:grid;grid-template-rows:minmax(155px,1fr) auto;gap:8px;min-height:0}.office{position:relative;min-height:0;background:url("assets/runtime/office-bg.png") center/cover no-repeat;image-rendering:pixelated}.office:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,.08),rgba(10,13,18,.55))}.speech{position:absolute;left:9px;right:9px;bottom:9px;z-index:1;display:grid;gap:5px}.bubble{margin:0;padding:6px 7px;border:2px solid var(--line);background:rgba(24,34,34,.91);box-shadow:2px 2px 0 #07090b;font-size:.79rem;line-height:1.35}.facts{display:grid;gap:5px}.fact{padding:6px 7px;border:2px solid var(--line);background:#1d2b31;font-size:.73rem;line-height:1.3}.fixture{border-left:4px solid var(--gold);color:#eed89f}
+    .board{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:7px;height:100%;min-height:0}.scene{position:relative;min-height:0;overflow:hidden;border:2px solid var(--line);background:#183b31 url("assets/runtime/table-bg.png") center/cover no-repeat;image-rendering:pixelated}.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,10,10,.04),rgba(8,10,10,.25));pointer-events:none}.rivers{position:absolute;inset:7px;z-index:1;display:grid;grid-template-areas:"top top top" "left center right";grid-template-rows:80px minmax(0,1fr);grid-template-columns:124px 1fr 150px;gap:7px}.river{border:2px solid var(--line);background:rgba(22,35,34,.86);padding:5px;box-shadow:2px 2px 0 #07090b;overflow:hidden}.river.top{grid-area:top;justify-self:center;width:320px}.river.left{grid-area:left;align-self:start;justify-self:start;width:118px;max-height:104px;overflow:auto}.river.right{grid-area:right;align-self:center}.river h3{margin:0 0 3px;color:var(--muted);font-size:.68rem}.river-note{font-size:.61rem;line-height:1.22;color:var(--muted)}.meld{display:block;white-space:nowrap}.mini{display:inline-grid;place-items:center;width:24px;height:31px;margin:1px;border:1px solid #5f5747;border-radius:3px;background:var(--cream);color:#16120f;font-size:1.18rem;vertical-align:middle}.mini.red,.tile.red{color:#a32222}.center-note{grid-area:center;align-self:center;justify-self:center;width:min(330px,100%);padding:8px;border:2px solid var(--line);background:rgba(15,24,24,.91);box-shadow:2px 2px 0 #07090b;text-align:center;font-size:.74rem;line-height:1.35}.player-river{position:absolute;left:50%;bottom:9px;z-index:2;transform:translateX(-50%);min-width:225px;max-width:58%;padding:5px 7px;border:2px solid var(--line);background:rgba(35,50,46,.95);box-shadow:2px 2px 0 #07090b;text-align:center;font-size:.68rem}.hand{display:grid;grid-template-columns:repeat(var(--hand-size,14),minmax(34px,1fr));gap:4px}.tile{height:58px;min-width:0;padding:2px 1px;border:2px solid #5e5443;border-radius:4px;background:var(--cream);color:#15110e;box-shadow:0 4px 0 #0b0e12;cursor:pointer}.tile:hover,.tile:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+    .tile.tutorial-safe-candidate{position:relative;z-index:4}
+    .tile.tutorial-safe-candidate::after{
+      content:"";position:absolute;inset:-6px;border:2px solid #ffe29a;border-radius:8px;
+      pointer-events:none;box-shadow:0 0 7px rgba(255,226,154,.75),0 0 16px rgba(201,150,63,.55);
+      animation:yamrailSafeCandidateHalo 4.2s cubic-bezier(.45,0,.2,1) infinite
+    }
+    @keyframes yamrailSafeCandidateHalo{
+      0%,100%{transform:translate(-1px,0) scale(1.00);opacity:.42}
+      24%{transform:translate(1px,-2px) scale(1.035);opacity:.96}
+      52%{transform:translate(0,1px) scale(1.055);opacity:.62}
+      76%{transform:translate(-2px,-1px) scale(1.025);opacity:1}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .tile.tutorial-safe-candidate::after{animation:none;opacity:.9}
+    }.tile[aria-pressed="true"]{transform:translateY(-6px);border-color:#2b8a63;background:#f8edce}.tile.drawn{border-color:var(--gold)}.tile:disabled{cursor:not-allowed;filter:saturate(.35);opacity:.62;transform:none}.glyph{display:block;font-family:"Segoe UI Symbol","Yu Gothic","Meiryo",sans-serif;font-size:1.9rem;line-height:1}.name{display:block;font-size:.58rem;white-space:nowrap}.round-progress{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:2px;font-size:.57rem}.round-progress span{padding:3px 1px;border:1px solid var(--line);background:#202b31;text-align:center;overflow:hidden}.round-progress span.active{background:#365c4c;color:#fff}.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.btn{min-height:35px;border:2px solid var(--line);background:#31483f;color:var(--ink);box-shadow:2px 2px 0 #07090b;cursor:pointer;font-size:.75rem;font-weight:800}.btn:hover,.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.btn:disabled{cursor:not-allowed;filter:saturate(.25);opacity:.44;box-shadow:none}.btn.primary{background:#6c5523}.btn.hold{background:#684626}.btn.win{background:#295f4a}.btn.ghost{background:#25313a}
+    .roles{display:grid;grid-template-rows:repeat(3,1fr);gap:7px;min-height:0}.role{display:grid;grid-template-columns:82px 1fr;gap:7px;min-height:0;padding:7px;border:2px solid var(--line);background:#18242a;box-shadow:3px 3px 0 #07090b;overflow:hidden}.portrait{width:82px;height:105px;border:2px solid var(--line);background:#0b0e12;object-fit:cover}.role h2{margin:0 0 4px;font-size:.82rem}.role-grid{display:block;font-size:.67rem;line-height:1.2}.key{color:var(--muted)}.state-row{display:flex;flex-wrap:wrap;gap:3px}.safety{padding:3px 5px;border:1px solid rgba(244,236,217,.25);background:#101820;overflow-wrap:anywhere}
+    .role-talk{position:relative;min-height:68px;padding:8px 9px 6px;border:1px solid rgba(244,236,217,.24);background:#101820}
+    .role-talk::before{content:"";position:absolute;left:-7px;top:14px;width:12px;height:12px;background:#101820;border-left:1px solid rgba(244,236,217,.24);border-bottom:1px solid rgba(244,236,217,.24);transform:rotate(45deg)}
+    .speech-line{position:relative;z-index:1;font-size:.78rem;line-height:1.35;font-weight:800;min-height:2.7em}
+    .speech-tags{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+    .role.speaking{animation:yamrailRolePop .24s steps(3,end)}
+    .role.speaking .portrait{animation:yamrailPortraitBop .24s steps(2,end)}
+    .role.speaking .role-talk{animation:yamrailTalkFlash .24s steps(2,end)}
+    @keyframes yamrailRolePop{0%{transform:translateY(0)}35%{transform:translateY(-3px)}70%{transform:translateY(1px)}100%{transform:translateY(0)}}
+    @keyframes yamrailPortraitBop{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    @keyframes yamrailTalkFlash{0%{transform:translateX(-3px);filter:brightness(.9)}50%{transform:translateX(2px);filter:brightness(1.18)}100%{transform:translateX(0);filter:brightness(1)}}
+    @media (prefers-reduced-motion:reduce){.role.speaking,.role.speaking .portrait,.role.speaking .role-talk{animation:none}}
+    .benevolent-event{position:absolute;top:10px;left:50%;z-index:6;transform:translateX(-50%);width:min(330px,calc(100% - 24px));padding:7px 10px;border:2px solid #f0c96d;background:#3d3420;color:#fff4cf;box-shadow:3px 3px 0 #07090b;text-align:center;font-size:.76rem;font-weight:800;pointer-events:none;animation:yamrailBenevolentNotice .9s steps(4,end) both}
+    @keyframes yamrailBenevolentNotice{0%{opacity:0;transform:translate(-50%,-4px)}12%,78%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,0)}}
+    @media (prefers-reduced-motion:reduce){.benevolent-event{animation:none}}
+    .footer{display:grid;grid-template-columns:34% 66%;gap:8px;min-height:0}.footer.no-result{grid-template-columns:1fr}.states{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.statebox{min-width:0;padding:5px 6px;border:2px solid var(--line);background:#1f2b31;font-size:.66rem;line-height:1.23;overflow:hidden}.statebox strong{display:block;margin-bottom:2px;color:#f0c96d}.result-panel{min-width:0;border:2px solid var(--line);background:#141e24;box-shadow:4px 4px 0 #07090b;overflow:auto}.result-body{display:grid;grid-template-columns:58% 42%;gap:7px;padding:6px}.result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;border-top:1px solid #4c514b;border-left:1px solid #4c514b}.result-grid div{min-width:0;padding:3px 4px;border-right:1px solid #4c514b;border-bottom:1px solid #4c514b;background:#1a272b}.result-grid dt{color:var(--muted);font-size:.58rem}.result-grid dd{margin:1px 0 0;font-size:.65rem;line-height:1.2;overflow-wrap:anywhere}.score-table{width:100%;border-collapse:collapse;font-size:.62rem}.score-table th,.score-table td{padding:3px 4px;border:1px solid #4c514b;text-align:right}.score-table th:first-child,.score-table td:first-child{text-align:left}.score-table th{background:#273b34}.score-source{margin-top:4px;padding:4px 6px;border-left:4px solid var(--gold);background:#2b241c;font-size:.61rem;line-height:1.25}.score-regression{margin-top:3px;color:#acd7be;font-size:.61rem}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+    @media(max-width:1100px){body{overflow:auto}.screen{height:auto;min-height:100vh;grid-template-rows:auto auto auto}.main{grid-template-columns:1fr}.office{height:250px}.roles{grid-template-rows:none}.footer{grid-template-columns:1fr}.result-body{grid-template-columns:1fr}.mode-buttons{grid-template-columns:1fr}.mode-button{min-height:88px}}@media(max-width:650px){.actions{grid-template-columns:repeat(2,1fr)}.result-grid{grid-template-columns:repeat(2,1fr)}.round-progress{grid-template-columns:repeat(7,1fr)}.rivers{grid-template-columns:94px 1fr 110px}.river.top{width:260px}.hand{grid-template-columns:repeat(7,1fr)}}
+    /* Retain the July board and artwork; expand readable game space on small screens. */
+    .riichi-mark{outline:2px solid #f0c96d;transform:rotate(10deg)}
+    .river-note{display:block;font-size:.72rem;color:#f0c96d}.river.left{display:block;grid-template-rows:none;min-height:0;max-height:190px}.river.top{overflow:auto}.river.right{max-height:380px;overflow:auto}
+    .player-river{height:auto;min-height:38px;white-space:normal}
+    .screen{grid-template-rows:auto minmax(0,1fr) auto}
+    .states{min-height:170px}.statebox{overflow:visible;font-size:.73rem;line-height:1.4}.score-table{font-size:.78rem}.result-grid dt{font-size:.7rem}.result-grid dd{font-size:.78rem}.score-source{font-size:.72rem}
+    .speech-line{font-size:.86rem;line-height:1.4}.role{overflow:visible;min-height:132px}
+    .round-progress{flex-wrap:wrap}.actions{grid-template-columns:repeat(4,minmax(0,1fr))}.audio-controls{flex-wrap:wrap}
+    @media(max-width:650px){.screen{padding:6px}.scene{min-height:530px}.rivers{grid-template-areas:"top top" "left right" "center center";grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:90px minmax(0,1fr) auto;inset:8px 8px 76px;gap:6px}.river.top{width:100%;max-width:none}.river.left,.river.right{width:auto;max-width:none;max-height:240px;min-height:90px;align-self:start;justify-self:stretch}.center-note{width:100%;max-width:none}.player-river{max-width:95%;max-height:100px;overflow:auto}.hand{grid-template-columns:repeat(7,minmax(0,1fr))}.tile{min-width:0;padding:2px;height:80px}.tile .glyph{font-size:2.5rem}.tile .name{font-size:.67rem}.actions{grid-template-columns:repeat(2,minmax(0,1fr))}.role{grid-template-columns:72px minmax(0,1fr)}.portrait{width:72px;height:96px}.statebox{font-size:.8rem}.office{height:220px}header{align-items:flex-start;flex-direction:column}.meta{justify-content:flex-start}.main{gap:10px}.btn{min-height:44px}.center-note{font-size:.8rem}.river .mini{font-size:1.4rem}}
+  </style>
+</head>
+<body>
+  <section class="mode-gate" id="modeGate" aria-labelledby="modeTitle">
+    <div class="mode-heading"><p>現場麻雀 Phase-01 Rev.4.0</p><h1 id="modeTitle">モード選択</h1></div>
+    <div class="mode-buttons">
+      <button class="mode-button" id="tutorialModeBtn" type="button">チュートリアルモード</button>
+      <button class="mode-button normal" id="normalModeBtn" type="button">通常モード</button>
     </div>
-
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="現場麻雀 トップ">
-        <span class="brand__mark" aria-hidden="true">現</span>
-        <span>
-          <strong>現場麻雀</strong>
-          <small>GENBA MAHJONG / YAMRAIL</small>
-        </span>
-      </a>
-      <nav aria-label="ページ内ナビゲーション">
-        <a href="#boundary">境界</a>
-        <a href="#bench">ベンチ</a>
-        <a href="#history">履歴</a>
-        <a href="#holds">既知HOLD</a>
-      </nav>
-    </header>
-
-    <main id="main" tabindex="-1">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero__copy">
-          <p class="eyebrow"><span>β.1</span> SAFE COLLABORATION WORKFACE</p>
-          <h1 id="hero-title">聴くけど、<em>ブレない。</em></h1>
-          <p class="hero__lead">
-            AI役は観測を整理し、仮説と反例を並べます。牌を切り、HOLDを解除し、
-            Authorityを行使する主体ではありません。最後の判断は、いつも人間側に残ります。
-          </p>
-          <div class="hero__actions">
-            <a class="button button--primary" href="#bench">教育ベンチを開く</a>
-            <a class="button button--quiet" href="#holds">公開境界を確認</a>
+  </section>
+  <main class="screen hidden" id="app" aria-labelledby="title">
+    <div class="top-stack">
+      <header>
+        <h1 id="title">現場麻雀 Phase-01 Rev.4.0 <span class="tag">A+B</span></h1>
+        <div class="meta">
+          <span class="tag obs" id="modeTag">モード未選択</span>
+          <span class="tag" id="turnTag">東1局</span>
+          <span class="tag" id="selfScoreTag">自家25000点</span><span class="tag" id="phaseTag">待機</span>
+          <span class="tag">外部通信0</span>
+          <div class="audio-controls" role="group" aria-label="音響操作">
+            <span class="tag" id="audioState" aria-live="polite">GAME SOUND 待機</span>
+            <label class="bgm-toggle" for="gameSoundToggle"><input id="gameSoundToggle" type="checkbox" checked><span id="gameSoundLabel">効果音 ON</span></label><label class="bgm-toggle" for="bgmToggle"><input id="bgmToggle" type="checkbox"><span id="bgmLabel">BGM OFF</span></label>
           </div>
+          <button class="mode-return" id="modeBackBtn" type="button">モード選択</button>
         </div>
-
-        <aside class="root-card" aria-labelledby="root-title">
-          <div class="root-card__header">
-            <p class="micro-label">D0022 / HUMAN-ADOPTED ROOT VALUE</p>
-            <span class="status-chip status-chip--observed">CANONICAL ROOT</span>
-          </div>
-          <h2 id="root-title">安全な協働のための基面</h2>
-          <ul class="invariant-list">
-            <li><code>YAMRAIL = SAFE COLLABORATION INFRASTRUCTURE</code></li>
-            <li><code>AI_MAX_EPISTEMIC_ROLE = HYPOTHESIS_AND_MEASUREMENT_SUPPORT</code></li>
-            <li><code>EVIDENCE != JUDGMENT != AUTHORITY</code></li>
-            <li><code>WORKER CONSENSUS != AUTHORITY</code></li>
-            <li><code>COMMON COMMUNICATION BASE != UNIVERSAL JUDGE</code></li>
-          </ul>
-          <p class="root-card__note">
-            共通の言葉で状態を運びます。専門判断を一つの万能判定へ置き換えません。
-          </p>
-        </aside>
-      </section>
-
-      <section class="section boundary" id="boundary" aria-labelledby="boundary-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">WHO MAY DO WHAT</p>
-            <h2 id="boundary-title">一枚の画面でも、権限は混ぜない</h2>
-          </div>
-          <p>
-            情報の流れは接続しても、判断権限は自動で接続しません。
-            この境界はworker数、confidence、処理成功では越えられません。
-          </p>
-        </div>
-
-        <div class="boundary-lane" aria-label="AI支援からHuman Authorityまでの境界">
-          <article class="boundary-node boundary-node--ai">
-            <span class="boundary-node__number">01</span>
-            <p class="micro-label">AI / FIXTURE SIDE</p>
-            <h3>観測・仮説・反例・測定支援</h3>
-            <p>候補を増やし、弱点を探し、不足している測定を示します。</p>
-            <span class="boundary-node__limit">上限: ADVISORY</span>
-          </article>
-          <div class="boundary-joint" aria-label="権限境界">
-            <span aria-hidden="true">≠</span>
-            <strong>Authority<br />firewall</strong>
-          </div>
-          <article class="boundary-node boundary-node--human">
-            <span class="boundary-node__number">02</span>
-            <p class="micro-label">HUMAN / DOMAIN SIDE</p>
-            <h3>判断・打牌・HOLD解除・Authority</h3>
-            <p>採否、許容risk、行動、責任は、明示された人間または専門Authorityが担います。</p>
-            <span class="boundary-node__limit">このfixture: 局所記録のみ</span>
-          </article>
-        </div>
-
-        <div class="semantic-legend" aria-labelledby="legend-title">
-          <h3 id="legend-title">意味を潰さない9つの表示</h3>
-          <p>色だけに依存せず、状態名・主体・説明を常に併記します。</p>
-          <div class="semantic-legend__items">
-            <span class="semantic-tag semantic-tag--observed" data-semantic="OBSERVED">OBSERVED / 観測</span>
-            <span class="semantic-tag semantic-tag--inference" data-semantic="INFERENCE">INFERENCE / 推論</span>
-            <span class="semantic-tag semantic-tag--hypothesis" data-semantic="HYPOTHESIS">HYPOTHESIS / 仮説</span>
-            <span class="semantic-tag semantic-tag--counterexample" data-semantic="COUNTEREXAMPLE">COUNTEREXAMPLE / 反例</span>
-            <span class="semantic-tag semantic-tag--unknown" data-semantic="UNKNOWN">UNKNOWN / 未確定</span>
-            <span class="semantic-tag semantic-tag--hold" data-semantic="HOLD">HOLD / 保留</span>
-            <span class="semantic-tag semantic-tag--advisory" data-semantic="AI_ADVISORY">AI ADVISORY / 助言</span>
-            <span class="semantic-tag semantic-tag--judgment" data-semantic="HUMAN_JUDGMENT">HUMAN JUDGMENT / 人間判断</span>
-            <span class="semantic-tag semantic-tag--authority" data-semantic="HUMAN_AUTHORITY_ACTION">HUMAN ACTION / 局所操作</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="section bench" id="bench" aria-labelledby="bench-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">INTERACTIVE FIXTURE / BROWSER MEMORY ONLY</p>
-            <h2 id="bench-title">二つの助言票を並べ、人間へ渡す</h2>
-          </div>
-          <div class="session-plate" aria-label="fixture session">
-            <span>SESSION</span>
-            <code id="session-id">initializing…</code>
-            <button class="text-button" id="new-session" type="button">新しい局所session</button>
-          </div>
-        </div>
-
-        <div class="bench-disclosure" role="note">
-          <strong>この場で動くのは決定論的fixtureだけです。</strong>
-          <span>外部AI、model provider、認証service、牌譜解析serviceには接続しません。</span>
-        </div>
-
-        <div class="bench-grid">
-          <div class="bench-main">
-            <article class="panel scenario-panel" aria-labelledby="scenario-title">
-              <div class="panel__header">
-                <div>
-                  <p class="micro-label">SYNTHETIC SCENARIO</p>
-                  <h3 id="scenario-title">同じ打牌候補をめぐる二worker照査</h3>
-                </div>
-                <span class="status-chip status-chip--hold" id="consensus-chip">NO CONSENSUS</span>
-              </div>
-
-              <fieldset class="scenario-choices">
-                <legend>反例条件を選ぶ</legend>
-                <label>
-                  <input type="radio" name="scenario" value="common" checked />
-                  <span><strong>共通モード</strong><small>rule sourceを共有</small></span>
-                </label>
-                <label>
-                  <input type="radio" name="scenario" value="disjoint" />
-                  <span><strong>分離metadata</strong><small>全resourceを分離</small></span>
-                </label>
-                <label>
-                  <input type="radio" name="scenario" value="unknown" />
-                  <span><strong>UNKNOWN</strong><small>resource metadata欠落</small></span>
-                </label>
-              </fieldset>
-
-              <div class="action-row" aria-label="fixture操作">
-                <button class="button button--secondary" id="add-observation" type="button">
-                  観測を追加
-                </button>
-                <button class="button button--primary" id="generate-proposals" type="button">
-                  仮説を二案提示
-                </button>
-                <button class="button button--danger" id="inject-counterexample" type="button">
-                  反例を注入
-                </button>
-              </div>
-
-              <p class="consensus-callout" id="consensus-copy">
-                workerの一致はまだありません。一致してもHuman Authorityには変わりません。
-              </p>
-            </article>
-
-            <div class="candidate-grid" aria-label="AI助言候補">
-              <article class="candidate-card" id="candidate-a">
-                <div class="candidate-card__top">
-                  <span class="candidate-card__key">A</span>
-                  <span class="semantic-tag semantic-tag--unknown">UNKNOWN</span>
-                </div>
-                <p class="micro-label">SYNTHETIC WORKER PROPOSAL</p>
-                <h3>候補Aは未提示です</h3>
-                <p class="candidate-card__copy">fixture操作で仮説を追加してください。</p>
-                <dl class="candidate-card__meta">
-                  <div><dt>主体</dt><dd>未割当</dd></div>
-                  <div><dt>効力</dt><dd>NONE</dd></div>
-                </dl>
-              </article>
-
-              <article class="candidate-card" id="candidate-b">
-                <div class="candidate-card__top">
-                  <span class="candidate-card__key">B</span>
-                  <span class="semantic-tag semantic-tag--unknown">UNKNOWN</span>
-                </div>
-                <p class="micro-label">SYNTHETIC WORKER PROPOSAL</p>
-                <h3>候補Bは未提示です</h3>
-                <p class="candidate-card__copy">fixture操作で仮説を追加してください。</p>
-                <dl class="candidate-card__meta">
-                  <div><dt>主体</dt><dd>未割当</dd></div>
-                  <div><dt>効力</dt><dd>NONE</dd></div>
-                </dl>
-              </article>
-            </div>
-
-            <article class="panel resource-panel" aria-labelledby="resource-title">
-              <div class="panel__header">
-                <div>
-                  <p class="micro-label">NO DIRECT EDGE != NO INTERACTION</p>
-                  <h3 id="resource-title">共有資源 / common-mode照査</h3>
-                </div>
-                <span class="mini-badge">synthetic metadata</span>
-              </div>
-              <div class="table-scroll" tabindex="0" aria-label="共有資源表。横スクロール可能">
-                <table>
-                  <caption>候補Aと候補Bのresource vector比較</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Resource</th>
-                      <th scope="col">候補 A</th>
-                      <th scope="col">候補 B</th>
-                      <th scope="col">関係</th>
-                    </tr>
-                  </thead>
-                  <tbody id="resource-body">
-                    <tr><th scope="row">provider</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                    <tr><th scope="row">auth</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                    <tr><th scope="row">cache</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                    <tr><th scope="row">dataset</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                    <tr><th scope="row">runtime</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                    <tr><th scope="row">ruleSource</th><td>—</td><td>—</td><td><span class="semantic-tag semantic-tag--unknown">UNKNOWN</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <p class="panel__footnote">
-                直接edgeがなくても、provider / auth / cache / dataset / runtime / rule sourceの共有は
-                failure independenceを失わせます。
-              </p>
-            </article>
-
-            <article class="panel ledger-panel" aria-labelledby="ledger-title">
-              <div class="panel__header">
-                <div>
-                  <p class="micro-label">SEMANTIC EVENT LEDGER</p>
-                  <h3 id="ledger-title">観測と解釈を別札で残す</h3>
-                </div>
-                <span class="mini-badge" id="record-count">0 records</span>
-              </div>
-              <ol class="record-list" id="record-list">
-                <li class="empty-state">sessionを初期化しています。</li>
-              </ol>
-            </article>
-          </div>
-
-          <aside class="human-gate" aria-labelledby="human-gate-title">
-            <div class="human-gate__header">
-              <p class="micro-label">EXPLICIT HUMAN-ONLY PATH</p>
-              <h3 id="human-gate-title">Human Gate</h3>
-              <p>判断と行動は別の操作です。worker一致でどちらも自動実行されません。</p>
-            </div>
-
-            <form id="judgment-form" class="gate-step">
-              <div class="gate-step__number" aria-hidden="true">1</div>
-              <div>
-                <h4>人間判断を記録</h4>
-                <p id="judgment-help">候補を読み、人間自身の理由を記入します。</p>
-                <label for="judgment-candidate">人間が選ぶ判断</label>
-                <select id="judgment-candidate" name="candidate" aria-describedby="judgment-help" required>
-                  <option value="">worker候補の提示後に選択できます</option>
-                </select>
-                <label for="judgment-rationale">人間の理由</label>
-                <textarea
-                  id="judgment-rationale"
-                  name="rationale"
-                  rows="3"
-                  maxlength="500"
-                  placeholder="AI助言とは別に、人間の判断理由を記録"
-                  required
-                ></textarea>
-                <button class="button button--human" type="submit" data-command="HUMAN_JUDGMENT">
-                  HUMAN JUDGMENTを局所記録
-                </button>
-              </div>
-            </form>
-
-            <form id="action-form" class="gate-step gate-step--locked">
-              <div class="gate-step__number" aria-hidden="true">2</div>
-              <div>
-                <h4>人間の打牌を別操作で記録</h4>
-                <p id="action-help">
-                  Step 1の候補牌へ固定結合されます。正解判定ではなく、browser内の教育記録です。
-                </p>
-                <label for="discard-value">人間が選んだ牌</label>
-                <select id="discard-value" name="discard" aria-describedby="action-help" disabled>
-                  <option value="">Step 1の判断へ結合されます</option>
-                </select>
-                <label class="check-row">
-                  <input id="action-confirm" type="checkbox" disabled />
-                  <span>AIの正解ではなく、私自身の打牌記録であることを確認</span>
-                </label>
-                <button class="button button--human" id="human-action" type="submit" data-command="HUMAN_ACTION" disabled>
-                  HUMAN ACTIONを局所記録
-                </button>
-              </div>
-            </form>
-
-            <div class="authority-lock" role="note">
-              <span class="authority-lock__icon" aria-hidden="true">×</span>
-              <div>
-                <strong>HOLD解除 / Authorityは利用不可</strong>
-                <p>本人確認・資格・署名がないため、このfixtureからcanonical HOLDを解除できません。</p>
-              </div>
-              <button type="button" disabled aria-disabled="true">HOLD解除（不可）</button>
-            </div>
-
-            <div class="human-ledger" aria-labelledby="human-ledger-title">
-              <h4 id="human-ledger-title">Human側の局所記録</h4>
-              <ol id="human-records">
-                <li class="empty-state">まだ記録はありません。</li>
-              </ol>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section history-section" id="history" aria-labelledby="history-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">BOUNDED HISTORY / REPLAYABLE CHECKPOINT</p>
-            <h2 id="history-title">長時間sessionを、無制限に抱え込まない</h2>
-          </div>
-          <p>
-            retained tailは上限付きです。古いeventはcheckpointへ集約し、
-            session座標と合計件数を失わずに再投影できる形でreceiptへ含めます。
-          </p>
-        </div>
-
-        <div class="history-grid">
-          <article class="history-meter panel">
-            <div class="history-meter__header">
-              <span>RETAINED EVENTS</span>
-              <strong><span id="history-retained">0</span> / <span id="history-capacity">0</span></strong>
-            </div>
-            <progress id="history-progress" max="1" value="0">0%</progress>
-            <dl class="metric-row">
-              <div><dt>Total events</dt><dd id="history-total">0</dd></div>
-              <div><dt>Compacted</dt><dd id="history-compacted">0</dd></div>
-              <div><dt>Checkpoint seq</dt><dd id="history-checkpoint">0</dd></div>
-            </dl>
-            <button class="button button--secondary" id="stress-history" type="button">
-              bounded historyを反例試験
-            </button>
-          </article>
-
-          <article class="receipt-panel panel">
-            <p class="micro-label">LOCAL TEACHING RECEIPT</p>
-            <h3>checkpoint + retained eventsを書き出す</h3>
-            <p>
-              receiptは照査用JSONです。署名、本人確認、canonical Evidence seal、Authority receiptではありません。
-            </p>
-            <button class="button button--primary" id="export-receipt" type="button">JSON receiptを保存</button>
-            <p class="receipt-panel__boundary">CANONICAL_EFFECT: NONE · IDENTITY: NOT VERIFIED</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section holds-section" id="holds" aria-labelledby="holds-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">PUBLIC LIMITS / NOT SILENTLY CLOSED</p>
-            <h2 id="holds-title">公開後も残すHOLD</h2>
-          </div>
-          <p>Public Beta公開は、技術的PASS、実運用資格、専門家受入、GAを意味しません。</p>
-        </div>
-
-        <div class="hold-grid">
-          <article><span>HOLD</span><h3>Real AI / provider</h3><p>未接続。実provider挙動やmodel品質を主張しません。</p></article>
-          <article><span>HOLD</span><h3>Human identity</h3><p>browser操作は本人確認、資格、署名の証明ではありません。</p></article>
-          <article><span>HOLD</span><h3>Canonical HOLD release</h3><p>局所fixture actionからproject HOLDを解除できません。</p></article>
-          <article><span>UNKNOWN</span><h3>麻雀の正解</h3><p>完全な牌効率、勝率、正解打牌を判定する戦略judgeではありません。</p></article>
-          <article><span>HOLD</span><h3>Live shared resources</h3><p>実provider / auth / cache / dataset / runtime / rule sourceは未通電です。</p></article>
-          <article><span>HOLD</span><h3>Production long-run</h3><p>multi-tab競合とproduction-like soakは未認定です。</p></article>
-          <article><span>HOLD</span><h3>Accessibility devices</h3><p>全実機・支援技術matrixは未検収です。</p></article>
-          <article><span>HOLD</span><h3>Private qualification</h3><p>T01–T12 + Flowの結果・HOLDは変更せず、Public Beta PASSへ転記しません。</p></article>
-          <article><span>UNKNOWN</span><h3>License</h3><p>公開可視性は再利用licenseの付与ではありません。</p></article>
-          <article><span>HOLD</span><h3>GA / production</h3><p>GA Authorityとproduction acceptanceは未受領です。</p></article>
-        </div>
-
-        <section class="closure-map" aria-labelledby="closure-map-title">
-          <div class="closure-map__header">
-            <div>
-              <p class="micro-label">D0023 / FOUNDER-INDEPENDENT HANDOFF</p>
-              <h3 id="closure-map-title">次の閉鎖点を、状態と責任者から読む</h3>
-            </div>
-            <p>公開repoだけではself-service成立とみなしません。AI/workerはどの行も閉じません。</p>
-          </div>
-
-          <div class="handoff-states" role="list" aria-label="Public Beta handoff states">
-            <article role="listitem"><strong>CLOSED</strong><span>決定論的な教育fixtureと公開receiptの範囲だけ</span></article>
-            <article role="listitem"><strong>OPEN</strong><span>再現手順付きの公開feedback / 反例</span></article>
-            <article role="listitem"><strong>UNKNOWN</strong><span>麻雀domain correctness / license</span></article>
-            <article role="listitem"><strong>HOLD</strong><span>real interface / identity / qualification / GA</span></article>
-          </div>
-
-          <div class="next-closure-grid">
-            <article>
-              <span>UNKNOWN · DOMAIN</span>
-              <h4>Qualified mahjong expert / Human domain Authority</h4>
-              <p><strong>Next:</strong> acceptance corpus、value vector、反例、許容誤差を定義してdomain reviewする。</p>
-            </article>
-            <article>
-              <span>HOLD · INTEGRATION / OPS</span>
-              <h4>Integration operator + resource owners</h4>
-              <p><strong>Next:</strong> canonical resource registryを結線し、real共有故障とmulti-tab長時間試験を行う。</p>
-            </article>
-            <article>
-              <span>HOLD · IDENTITY / QUALIFICATION</span>
-              <h4>Human security / qualification Authority</h4>
-              <p><strong>Next:</strong> identity・capability・revokeを反例試験し、private T01–T12 + Flowを別途再資格化する。</p>
-            </article>
-            <article>
-              <span>HOLD / UNKNOWN · RELEASE</span>
-              <h4>Named Human release / legal Authority</h4>
-              <p><strong>Next:</strong> licenseを選択し、残存riskをjudgmentしたうえでGAを別receiptとして明示する。</p>
-            </article>
-          </div>
-
-          <p class="closure-map__boundary">
-            FOUNDER CAN DO IT != SYSTEM CAN REPRODUCE IT · PUBLIC REPO != SELF-SERVICE · NEXT CLOSURE POINT SHOULD BE IDENTIFIABLE
-          </p>
+      </header>
+    </div>
+    <section class="main">
+      <div class="left">
+        <section class="panel office" aria-label="夜の現場事務所">
+          <div class="speech"><p class="bubble">職長「今日も帰ってこれたな。」</p><p class="bubble">職長「……一局、やるか。」</p></div>
         </section>
-
-        <details class="why-mahjong">
-          <summary>なぜ「麻雀」なのか</summary>
-          <div>
-            <p>
-              不完全な情報のまま単一の正解へ急がず、二案と退路を残し、危険な状態をHOLDし、
-              新しいEvidenceを待つ構造を学ぶためです。「和了をAIへ委任する」比喩ではありません。
-            </p>
-            <code>AI SUPPORTS THE WAIT / HUMAN DECIDES THE PLAY</code>
+        <section class="panel">
+          <div class="panel-title"><span id="factsTitle">局面条件</span><span class="tag unk hidden" id="provenanceTag" aria-hidden="true">SOURCE</span></div>
+          <div class="panel-body facts">
+            <div class="fact" id="factOne">局面を読み込みます。</div>
+            <div class="fact" id="factTwo">公開情報を表示します。</div>
+            <div class="fact" id="factThree">UNKNOWNを保持します。</div>
+            <div class="fact fixture hidden" id="fixtureFact" aria-hidden="true"></div>
           </div>
-        </details>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div>
-        <strong>現場麻雀 <span>Public Beta</span></strong>
-        <p>YamRail = safe collaboration infrastructure for Human + AI + domain experts.</p>
+        </section>
       </div>
-      <nav aria-label="公開資料">
-        <a href="https://github.com/Yamrail/genba-mahjong/blob/main/README.md">README</a>
-        <a href="https://github.com/Yamrail/genba-mahjong/blob/main/docs/ARCHITECTURE.md">Architecture</a>
-        <a href="https://github.com/Yamrail/genba-mahjong/blob/main/docs/KNOWN_HOLDS.md">Known HOLDs</a>
-        <a href="https://github.com/Yamrail/genba-mahjong/blob/main/docs/PROVENANCE.md">Provenance</a>
-      </nav>
-    </footer>
+      <section class="panel board" aria-labelledby="boardTitle">
+        <div class="panel-title"><span id="boardTitle">対局</span><span class="tag">背景牌＝装飾</span><span class="tag" id="selectedTag">牌を選択</span></div>
+        <div class="scene" aria-label="背景の牌は装飾です。判断対象は手牌・河・副露欄です">
+          <div class="benevolent-event hidden" id="benevolentEvent" role="status" aria-live="polite">善意合成注意</div>
+          <div class="rivers">
+            <div class="river top"><h3 id="topRiverTitle">対面</h3><div id="topRiverTiles"></div></div>
+            <div class="river left"><h3 id="leftRiverTitle">上家</h3><div id="leftRiverTiles"></div><div class="river-note hidden" id="leftRiverNote" aria-hidden="true"></div></div>
+            <div class="river right"><h3 id="rightRiverTitle">下家</h3><div id="rightMelds"></div><div id="rightRiverTiles"></div></div>
+            <div class="center-note" id="centerNote">局面を開始します。</div>
+          </div>
+          <div class="player-river" id="playerRiver">自家 打牌なし</div>
+        </div>
+        <div class="hand" id="hand" role="list" aria-label="自家手牌"></div>
+        <div class="round-progress" id="roundProgress" aria-label="局進行"></div>
+        <div class="actions">
+          <button class="btn primary" id="discardBtn" type="button">切る</button>
+          <button class="btn hold" id="holdBtn" type="button">HOLD</button>
+          <button class="btn win" id="tsumoBtn" type="button">ツモ和了</button>
+          <button class="btn" id="riichiBtn" type="button">立直を宣言</button>
+          <button class="btn win" id="ronBtn" type="button" disabled>ロン</button>
+          <button class="btn" id="passRonBtn" type="button" disabled>ロン見逃し</button>
+          <button class="btn ghost" id="nextRoundBtn" type="button" disabled>次局</button>
+          <button class="btn ghost" id="resetBtn" type="button">局をやり直す</button>
+        </div>
+      </section>
+      <aside class="roles" aria-label="三役の現在判断">
+        <article class="role"><img class="portrait" src="assets/runtime/role-foreman.png" alt="職長"><div><h2>職長</h2><div class="role-grid" id="roleForeman"></div></div></article>
+        <article class="role"><img class="portrait" src="assets/runtime/role-drawing.png" alt="図面担当"><div><h2>図面担当</h2><div class="role-grid" id="roleDrawing"></div></div></article>
+        <article class="role"><img class="portrait" src="assets/runtime/role-junior.png" alt="若手作業者"><div><h2>若手作業者</h2><div class="role-grid" id="roleJunior"></div></div></article>
+      </aside>
+    </section>
+    <section class="footer">
+      <div class="states">
+        <div class="statebox"><strong>OBSERVED</strong><span id="obsText">観測済み事実</span></div>
+        <div class="statebox"><strong>INFERRED</strong><span id="infText">推定</span></div>
+        <div class="statebox"><strong>UNKNOWN</strong><span id="unkText">未確認</span></div>
+        <div class="statebox"><strong>CONFLICT</strong><span id="confText">競合</span></div>
+        <div class="statebox"><strong>HOLD</strong><span id="holdText">助言状態</span></div>
+        <div class="statebox"><strong>HUMAN</strong><span id="humanText">最終判断</span></div>
+      </div>
+      <section class="result-panel hidden" aria-labelledby="resultTitle" aria-live="polite">
+        <div class="panel-title"><span id="resultTitle">局結果・点数計算</span><span class="tag hold" id="resultStatus">結果待機</span></div>
+        <div class="result-body">
+          <dl class="result-grid">
+            <div><dt>結果種別</dt><dd id="resultType">未確定</dd></div>
+            <div><dt>和了者</dt><dd id="resultWinner">未確定</dd></div>
+            <div><dt>放銃者</dt><dd id="resultLoser">未確定</dd></div>
+            <div><dt>和了牌</dt><dd id="resultTile">未確定</dd></div>
+            <div><dt>役一覧</dt><dd id="resultYaku">未確定</dd></div>
+            <div><dt>翻</dt><dd id="resultHan">未確定</dd></div>
+            <div><dt>符</dt><dd id="resultFu">未確定</dd></div>
+            <div><dt>区分</dt><dd id="resultLimit">未確定</dd></div>
+            <div><dt>本場</dt><dd id="resultHonba">0本場</dd></div>
+            <div><dt>供託</dt><dd id="resultPool">0本</dd></div>
+            <div><dt>支払点</dt><dd id="resultPayment">未確定</dd></div>
+            <div><dt>状態機械</dt><dd id="resultPhase">MODE_SELECT</dd></div>
+          </dl>
+          <div>
+            <table class="score-table" aria-label="四家点棒増減">
+              <thead><tr><th>家</th><th>開始点</th><th>増減</th><th>終了点</th></tr></thead>
+              <tbody>
+                <tr><td>東・自家</td><td id="eastStart">-</td><td id="eastDelta">-</td><td id="eastEnd">-</td></tr>
+                <tr><td>南・下家</td><td id="southStart">-</td><td id="southDelta">-</td><td id="southEnd">-</td></tr>
+                <tr><td>西・対面</td><td id="westStart">-</td><td id="westDelta">-</td><td id="westEnd">-</td></tr>
+                <tr><td>北・上家</td><td id="northStart">-</td><td id="northDelta">-</td><td id="northEnd">-</td></tr>
+              </tbody>
+            </table>
+            <div class="score-source" id="scoreSource">共通engineが実局面から計算します。</div>
+            <div class="score-regression" id="regressionResult">旧点数算術例（牌理証明外）: 検査中</div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="engine.js"></script>
+  <script src="round.js"></script>
+  <script>
+  (()=>{"use strict";
+    const C=window.YRCore,R=window.YRRound;
+    const TILE_DEFS=[
+      ['m1','一萬','🀇'],['m2','二萬','🀈'],['m3','三萬','🀉'],['m4','四萬','🀊'],['m5','五萬','🀋'],['m6','六萬','🀌'],['m7','七萬','🀍'],['m8','八萬','🀎'],['m9','九萬','🀏'],
+      ['p1','一筒','🀙'],['p2','二筒','🀚'],['p3','三筒','🀛'],['p4','四筒','🀜'],['p5','五筒','🀝'],['p6','六筒','🀞'],['p7','七筒','🀟'],['p8','八筒','🀠'],['p9','九筒','🀡'],
+      ['s1','一索','🀐'],['s2','二索','🀑'],['s3','三索','🀒'],['s4','四索','🀓'],['s5','五索','🀔'],['s6','六索','🀕'],['s7','七索','🀖'],['s8','八索','🀗'],['s9','九索','🀘'],
+      ['east','東','🀀'],['south','南','🀁'],['west','西','🀂'],['north','北','🀃'],['white','白','🀆'],['green','發','🀅'],['red','中','🀄']
+    ];
+    const DEF_MAP=Object.fromEntries(TILE_DEFS.map(([type,name,glyph],index)=>[type,{type,name,glyph,index}]));
+    const SEATS=['東','南','西','北'];
+    const PROGRESSION=['配牌/固定','自摸','判断','切牌','他家進行','次巡','終局','役','翻符','支払い','点差','結果','次局'];
+    const PHASE_INDEX={DEAL:0,DRAW:1,JUDGMENT:2,HOLD_ADVISORY:2,HUMAN_DISCARD:3,OPPONENT_ACTIONS:4,NEXT_TURN:5,TERMINAL:6,SCORING:7,RESULT:11};
+    let mode=null;
+    let game=null;
+    let selectedId=null;
+    let holdActive=false;
+    let busy=false;
+    let fixedStartComparisonActive=false;
+    let benevolentEventState=null;
+    let benevolentEventTimer=null;
+    const benevolentEventSeen=new Set();
+    let epoch=0;const turnTimers=new Set();let riichiPending=false;
+    function later(fn,ms){const e=epoch;const id=window.setTimeout(()=>{turnTimers.delete(id);if(epoch===e&&game)fn()},ms);turnTimers.add(id);return id;}
+    function cancelRound(){epoch++;turnTimers.forEach(id=>window.clearTimeout(id));turnTimers.clear();clearBenevolentEvent(true);riichiPending=false;}
+    function freshSeed(){const values=new Uint32Array(1);window.crypto.getRandomValues(values);return values[0];}
+    function configuredSeed(){const raw=new URLSearchParams(location.search).get('seed');return raw!==null&&/^\d+$/.test(raw)?Number(raw)>>>0:freshSeed();}
+    let statusMessage='モードを選択してください。';
 
-    <div class="toast" id="status-message" role="status" aria-live="polite" aria-atomic="true"></div>
-    <noscript>
-      <div class="noscript">この教育ベンチの操作にはJavaScriptが必要です。説明文と公開境界は引き続き閲覧できます。</div>
-    </noscript>
-  </body>
+
+    function ceil100(v){return C.ceil100(v)}
+    function calculateBasePoints(v){return C.basePoints(v)}
+    function calculatePoints(v){return C.points(v)}
+    function evaluateHand(input){return C.evaluate({...input,honba:input.honba??game?.honba??0})}
+
+    function isTenpai(player){return C.waits(player.hand,player.openMelds).length>0}
+
+    function runScoreRegression(){
+      const before={south:6000,east:3000,pool:0};const ledger=[{south:-1000,east:0,pool:1000},{south:16000,east:-16000,pool:0},{south:1000,east:0,pool:-1000}];
+      const after=ledger.reduce((state,row)=>({south:state.south+row.south,east:state.east+row.east,pool:state.pool+row.pool}),before);
+      const conserved=ledger.every(row=>row.south+row.east+row.pool===0);const baiman=calculatePoints({dealer:false,winType:'ron',han:8,fu:30,honba:0}).ron===16000;
+      return {before,after,conserved,baiman,pass:after.south===22000&&after.east===-13000&&after.pool===0&&conserved&&baiman};
+    }
+    const scoreRegression=runScoreRegression();
+
+    class SoundEngine{
+      constructor(){this.ctx=null;this.bgmBus=null;this.gameSoundBus=null;this.ambient=null;this.se=null;this.limiter=null;this.bgmEnabled=false;this.gameSoundEnabled=true;this.bgmStarted=false;this.ambientStarted=false;this.started=false;this.timers=[];this.eventsPlayed=[]}
+      async unlock(){
+        if(this.ctx){if(this.ctx.state==='suspended')await this.ctx.resume();return}
+        const C=window.AudioContext||window.webkitAudioContext;if(!C){this.setState('音響非対応');return}
+        this.ctx=new C();this.bgmBus=this.ctx.createGain();this.gameSoundBus=this.ctx.createGain();this.ambient=this.ctx.createGain();this.se=this.ctx.createGain();this.limiter=this.ctx.createDynamicsCompressor();
+        this.bgmBus.gain.value=0;this.gameSoundBus.gain.value=this.gameSoundEnabled?1:0;this.ambient.gain.value=.055;this.se.gain.value=.30;this.limiter.threshold.value=-3;this.limiter.knee.value=4;this.limiter.ratio.value=12;this.limiter.attack.value=.002;this.limiter.release.value=.08;
+        this.ambient.connect(this.gameSoundBus);this.se.connect(this.gameSoundBus);this.gameSoundBus.connect(this.limiter);this.bgmBus.connect(this.limiter);this.limiter.connect(this.ctx.destination);
+        if(this.ctx.state==='suspended')await this.ctx.resume();this.started=true;this.startAmbient();this.setState('GAME SOUND ON / BGM OFF');
+      }
+      setState(text){const element=document.getElementById('audioState');if(element)element.textContent=text}
+      setGameSound(enabled){this.gameSoundEnabled=enabled;if(this.ctx)this.gameSoundBus.gain.setTargetAtTime(enabled?1:0,this.ctx.currentTime,.02);document.getElementById('gameSoundLabel').textContent=enabled?'効果音 ON':'効果音 OFF';this.setState('GAME SOUND '+(enabled?'ON':'OFF')+' / BGM '+(this.bgmEnabled?'ON':'OFF'));}
+      setBgm(enabled){this.bgmEnabled=enabled;if(this.ctx){if(enabled)this.startBgm();this.bgmBus.gain.setTargetAtTime(enabled?.075:0,this.ctx.currentTime,.03)}document.getElementById('bgmLabel').textContent=enabled?'BGM ON':'BGM OFF';this.setState((this.started?('GAME SOUND '+(this.gameSoundEnabled?'ON':'OFF')):'GAME SOUND 待機')+' / '+(enabled?'BGM ON':'BGM OFF'))}
+      osc(bus,freq,dur,type='sine',gain=.18,delay=0){if(!this.ctx)return;const now=this.ctx.currentTime+delay;const oscillator=this.ctx.createOscillator();const amp=this.ctx.createGain();oscillator.type=type;oscillator.frequency.setValueAtTime(freq,now);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(gain,now+.015);amp.gain.exponentialRampToValueAtTime(.0001,now+dur);oscillator.connect(amp);amp.connect(bus);oscillator.start(now);oscillator.stop(now+dur+.02)}
+      noise(bus,dur,gain=.16,delay=0){if(!this.ctx)return;const now=this.ctx.currentTime+delay;const length=Math.max(1,Math.floor(this.ctx.sampleRate*dur));const buffer=this.ctx.createBuffer(1,length,this.ctx.sampleRate);const values=buffer.getChannelData(0);for(let i=0;i<length;i++)values[i]=(Math.random()*2-1)*(1-i/length);const source=this.ctx.createBufferSource();const amp=this.ctx.createGain();const filter=this.ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.value=900;filter.Q.value=2.2;amp.gain.setValueAtTime(gain,now);amp.gain.exponentialRampToValueAtTime(.0001,now+dur);source.buffer=buffer;source.connect(filter);filter.connect(amp);amp.connect(bus);source.start(now);source.stop(now+dur)}
+      play(kind){if(!this.ctx)return;this.eventsPlayed.push(kind);const sounds={
+        select:()=>{this.osc(this.se,523,.09,'triangle',.18);this.osc(this.se,659,.08,'sine',.11,.07)},deselect:()=>{this.osc(this.se,330,.10,'triangle',.12);this.osc(this.se,220,.12,'sine',.10,.06)},
+        discard:()=>{this.duckBgm();this.noise(this.se,.08,.36);this.osc(this.se,180,.12,'square',.24,.04);this.osc(this.se,96,.18,'triangle',.20,.13)},hold:()=>{this.osc(this.se,155,.22,'triangle',.16);this.osc(this.se,116,.28,'sine',.10,.13)},
+        reset:()=>{this.osc(this.se,262,.10,'triangle',.14);this.osc(this.se,330,.12,'triangle',.12,.09);this.osc(this.se,392,.13,'triangle',.10,.18)},transition:()=>{this.osc(this.se,440,.08,'sine',.11);this.osc(this.se,554,.09,'sine',.10,.06)},
+        invalid:()=>{this.osc(this.se,80,.18,'sawtooth',.13);this.noise(this.se,.08,.11,.04)},win:()=>{this.osc(this.se,392,.14,'sine',.17);this.osc(this.se,523,.18,'triangle',.18,.10);this.osc(this.se,784,.26,'sine',.14,.22)},
+        dealIn:()=>{this.osc(this.se,147,.22,'sawtooth',.18);this.osc(this.se,98,.31,'triangle',.14,.14)},draw:()=>{this.osc(this.se,247,.18,'sine',.14);this.osc(this.se,220,.24,'triangle',.12,.12)},
+        result:()=>{this.osc(this.se,440,.12,'sine',.14);this.osc(this.se,659,.17,'triangle',.15,.09);this.osc(this.se,880,.20,'sine',.11,.20)}
+      };sounds[kind]?.()}
+      duckBgm(){if(!this.ctx||!this.bgmEnabled)return;const now=this.ctx.currentTime;this.bgmBus.gain.cancelScheduledValues(now);this.bgmBus.gain.setTargetAtTime(.018,now,.015);this.bgmBus.gain.setTargetAtTime(.075,now+.34,.10)}
+      startBgm(){if(!this.ctx||this.bgmStarted)return;this.bgmStarted=true;const notes=[196,247,220,165,196,294,247,220];let index=0;const pulse=()=>{if(!this.ctx)return;const frequency=notes[index++%notes.length];this.osc(this.bgmBus,frequency,.56,'sine',.11);this.osc(this.bgmBus,frequency/2,.68,'triangle',.055)};pulse();this.timers.push(setInterval(pulse,420))}
+      startAmbient(){if(!this.ctx||this.ambientStarted)return;this.ambientStarted=true;const bed=()=>{if(!this.ctx)return;this.noise(this.ambient,1.45,.055);this.osc(this.ambient,58,1.5,'sine',.04,.04)};bed();this.timers.push(setInterval(bed,1250))}
+    }
+    const sound=new SoundEngine();
+    async function unlockSoundSafe(){
+      try{await sound.unlock()}
+      catch(error){sound.setState('GAME SOUND ERROR / 操作継続')}
+    }
+
+    async function recordHashes(g){
+      if(!window.crypto?.subtle)return;
+      const sha=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(n=>n.toString(16).padStart(2,'0')).join('');
+      const [wallHash,stateHash]=await Promise.all([sha(JSON.stringify(g.initialWallIds)),sha(g.initialStateJSON)]);
+      g.replayHashes={wallSHA256:wallHash,initialStateSHA256:stateHash};
+    }
+    function activate(g,message){game=g;selectedId=null;holdActive=false;riichiPending=false;busy=game.activeSeat!==0;fixedStartComparisonActive=mode==='tutorial';statusMessage=message;resetResult();renderAll();recordHashes(game);if(busy)later(()=>advanceSeat(game.activeSeat,true),100);}
+    function initTutorial(){cancelRound();activate(R.tutorial(),'固定Rev.4局面。省略履歴はUNKNOWN・ロンは局所HOLD。切牌とツモは継続できます。');}
+    function initNormal(){cancelRound();activate(R.normal(configuredSeed()),'通常局。牌を選び三役を比較し、人間が切ります。鳴き・カンは未対応です。');}
+
+    function currentTile(){return selectedId?game.players[0].hand.find(item=>item.uid===selectedId)||null:null}
+    function safeCandidateTypes(){
+      if(mode!=='tutorial'||!game||game.terminal||game.riichiSeat===null||game.riichiSeat===undefined)return new Set();
+      return new Set(game.players[game.riichiSeat].river.map(item=>item.type));
+    }
+    function isSafeCandidateVisual(item){
+      return !!item&&safeCandidateTypes().has(item.type);
+    }
+    function isCommonObservedDiscard(item){
+      if(!item||mode!=='tutorial')return false;
+      return [1,2,3].every(seat=>game.players[seat].river.some(riverTile=>riverTile.type===item.type));
+    }
+
+    function analysisTile(type){return {...DEF_MAP[type],uid:'analysis-'+type,red:false,drawn:false}}
+    function visibleTypeCount(type){if(!game)return 0;return [...game.players[0].hand,...game.players.flatMap(p=>[...p.river,...p.openMelds.flatMap(m=>m.tiles)]),game.deadWall[0]].filter(t=>t.type===type).length;}
+    function candidateSafetyProfile(item){return C.publicSafety(game,item)}
+
+    function waitsAfterDiscard(selected){if(!selected||!game)return [];const p=game.players[0];return C.waits(p.hand.filter(t=>t.id!==selected.id),p.openMelds).map(i=>C.TYPES[i]);}
+    function hasYakuWaitAfterDiscard(selected,waits){
+      const p=game.players[0],rest=p.hand.filter(t=>t.id!==selected.id);
+      // Intrinsic future-wait potential uses public/own established facts only.
+      // Actual win context retains physical indicators and situational yaku.
+      const intrinsic={seat:R.seatWind(game,0),roundWind:game.roundWind,riichi:!!p.riichi,doubleRiichi:!!p.riichi&&!!p.doubleRiichi,honba:0,doraIndicators:[],uraIndicators:[],haitei:false,houtei:false,ippatsu:false,tenhou:false,chiihou:false,renhou:false};
+      return waits.some(type=>!!C.evaluate({...intrinsic,preWinTiles:rest,winTile:analysisTile(type),winType:'ron',openMelds:p.openMelds}));
+    }
+
+    function structurallyIsolated(selected){
+      const rest=game.players[0].hand.filter(item=>item.uid!==selected.uid);
+      if(rest.some(item=>item.type===selected.type))return false;
+      if(selected.index>=27)return true;
+      const suitStart=Math.floor(selected.index/9)*9;
+      return !rest.some(item=>item.index>=suitStart&&item.index<suitStart+9&&Math.abs(item.index-selected.index)<=2);
+    }
+    function multipleSafeCandidateCount(){
+      const seen=new Set();let count=0;
+      game.players[0].hand.forEach(item=>{
+        if(seen.has(item.type))return;seen.add(item.type);
+        const safety=candidateSafetyProfile(item);
+        if(safety.allObserved||safety.riichiOnly||safety.suji||safety.kabe)count+=1;
+      });
+      return count;
+    }
+    function classifyCandidate(selected){
+      const safety=candidateSafetyProfile(selected),waits=waitsAfterDiscard(selected),keepsTenpai=waits.length>0;
+      const alternativeKeepsTenpai=game.players[0].hand.some(t=>t.uid!==selected.uid&&waitsAfterDiscard(t).length>0);
+      const breaksTenpai=!keepsTenpai&&alternativeKeepsTenpai,speedPriority=!keepsTenpai&&!breaksTenpai&&structurallyIsolated(selected);
+      const hasYakuWait=hasYakuWaitAfterDiscard(selected,waits),selectedLowersValue=keepsTenpai&&hasYakuWait&&(selected.red||selected.type===game.doraType);
+      const valueTiles=game.players[0].hand.filter(t=>t.uid!==selected.uid&&(t.red||t.type===game.doraType)).length;
+      const keepScore=keepsTenpai&&hasYakuWait&&!selectedLowersValue&&valueTiles>0;
+      const defensiveEvidence=safety.allObserved||safety.riichiOnly||safety.suji||safety.kabe||safety.oneChanceTiles.length>0;
+      const foldDefense=!!defensiveEvidence&&breaksTenpai,pushPull=safety.safetyUnknown&&keepsTenpai;
+      // A conflict compares independent attack and defense materials; it never requires both keep AND break tenpai.
+      const attackMaterial=keepsTenpai||alternativeKeepsTenpai,defenseMaterial=defensiveEvidence||safety.dangerousLive;
+      const conflictCode=attackMaterial&&defenseMaterial?'PF':foldDefense?'F':pushPull?'P':'N';
+      const multipleSafe=multipleSafeCandidateCount()>1;
+      let family=foldDefense?'FAM_FOLD_DEFENSE':selectedLowersValue?'FAM_LOWER_VALUE_KEEP_YAKU':keepScore?'FAM_KEEP_SCORE':pushPull?'FAM_PUSH_PULL_CONFLICT':safety.allObserved?'FAM_GENBUTSU_ALL_OBSERVED':safety.riichiOnly?'FAM_GENBUTSU_RIICHI_ONLY':defensiveEvidence?'FAM_SUJI_KABE_RELATIVE':safety.dangerousLive?'FAM_DANGEROUS_LIVE':breaksTenpai?'FAM_SAFETY_UNKNOWN_BREAK':speedPriority?'FAM_SPEED_PRIORITY':'FAM_SAFETY_UNKNOWN_KEEP';
+      const signature=[safety.allObserved?'A':safety.riichiOnly?'R':defensiveEvidence?'S':safety.dangerousLive?'D':'U',keepsTenpai?'K':breaksTenpai?'B':speedPriority?'V':'N',keepScore?'H':selectedLowersValue?'L':'N',conflictCode,safety.safetyUnknown?(keepsTenpai?'W':'M'):'N'].join('-');
+      const p=game.players[0],rest=p.hand.filter(t=>t.uid!==selected.uid),post={...p,hand:rest,river:[...p.river,selected]};
+      const efficiency=C.efficiency(rest,p.openMelds);
+      return {...safety,waits,keepsTenpai,breaksTenpai,speedPriority,hasYakuWait,keepScore,selectedLowersValue,foldDefense,pushPull,multipleSafe,family,signature,variant:family+'__'+signature,efficiency,shanten:efficiency.physicalShanten,furiten:C.furiten(post),waitDetails:waits.map(type=>({type,unseenCapacity:Math.max(0,4-visibleTypeCount(type)),deadObserved:visibleTypeCount(type)>=4})),safeConfirmed:safety.allObserved};
+    }
+
+    const DIALOGUE_FAMILIES={
+      FAM_GENBUTSU_RIICHI_ONLY:[['職長','リーチ者には現物。他家は別だ。','OBSERVED','部分安全'],['図面担当','対象河では現物。範囲を限定。','OBSERVED','限定根拠'],['若手作業者','通る相手は一人。まだ迷う。','HUMAN','比較中']],
+      FAM_GENBUTSU_ALL_OBSERVED:[['職長','三家の河で確認済み。形も見ろ。','OBSERVED','三家現物'],['図面担当','観測済み全家への現物。','OBSERVED','全家確認'],['若手作業者','見える相手には通る。次は形だ。','HUMAN','比較中']],
+      FAM_SUJI_KABE_RELATIVE:[['職長','弱い根拠だ。安全確定じゃない。','INFERRED','相対根拠'],['図面担当','スジ・壁は推定。UNKNOWNを維持。','UNKNOWN','昇格禁止'],['若手作業者','安全そう、で止めておく。','HUMAN','慎重']],
+      FAM_DANGEROUS_LIVE:[['職長','リーチ河に根拠なし。危険寄りだ。','INFERRED','危険寄り'],['図面担当','安全根拠なし。待ちはUNKNOWN。','UNKNOWN','未確定'],['若手作業者','押すなら危険込みで決める。','HUMAN','比較中']],
+      FAM_SAFETY_UNKNOWN_KEEP:[['職長','安全は読めん。形は分けて見ろ。','UNKNOWN','安全未確定'],['図面担当','公開情報不足。UNKNOWNを保持。','UNKNOWN','根拠不足'],['若手作業者','決めつけずに選ぶ。','HUMAN','比較中']],
+      FAM_SAFETY_UNKNOWN_BREAK:[['職長','安全は読めん。形も崩れる。','UNKNOWN','安全未確定'],['図面担当','安全UNKNOWN。テンパイ崩れ。','CALCULATED','形崩れ'],['若手作業者','崩す理由を自分で決める。','HUMAN','比較中']],
+      FAM_SPEED_PRIORITY:[['職長','孤立牌を外す速度判断だ。','INFERRED','速度'],['図面担当','接続の少なさだけを計算。','CALCULATED','手組み'],['若手作業者','速さを取るかは自分で決める。','HUMAN','比較中']],
+      FAM_KEEP_SCORE:[['職長','打点材料は手に残る。','INFERRED','打点維持'],['図面担当','有効役と価値牌を分けて確認。','CALCULATED','価値維持'],['若手作業者','点を残して進めたい。','HUMAN','攻め寄り']],
+      FAM_LOWER_VALUE_KEEP_YAKU:[['職長','役の待ちはある。価値牌を手放す。','INFERRED','打点低下'],['図面担当','ドラ・赤の枚数減。支払点数は別計算。','CALCULATED','役維持'],['若手作業者','安くても進むか迷う。','HUMAN','比較中']],
+      FAM_FOLD_DEFENSE:[['職長','守備根拠はある。形は崩れる。','OBSERVED','守備'],['図面担当','安全範囲と手牌損失を分離。','CALCULATED','撤退'],['若手作業者','降りるなら納得して切る。','HUMAN','守備寄り']],
+      FAM_PUSH_PULL_CONFLICT:[['職長','形は残る。安全は未確定だ。','CONFLICT','押し引き'],['図面担当','テンパイ維持とUNKNOWNが競合。','CALCULATED','競合'],['若手作業者','押すか降りるか、自分で決める。','HUMAN','比較中']],
+      FAM_MULTIPLE_SAFE_COMPARE:[['職長','候補は複数。形まで比べろ。','OBSERVED','比較層'],['図面担当','複数候補は局面比較として扱う。','CALCULATED','候補比較'],['若手作業者','安全だけで一枚に決めない。','HUMAN','比較中']]
+    };
+    function dialogueForClassification(selected,info){
+      const evidence=info.allObserved?'三家各自の河で現物':info.riichiOnly?'リーチ者の河で現物。他家はUNKNOWN':info.weakEvidence.length?info.weakEvidence.join(' + ')+'（弱い限定根拠）':'安全根拠なし・待ちはUNKNOWN';
+      const handState=(info.keepsTenpai?'テンパイ維持':info.breaksTenpai?'テンパイ崩れ':'向聴 '+info.shanten)+' / 構造待ち '+(info.waitDetails.map(w=>DEF_MAP[w.type].name+(w.deadObserved?'（全4枚可視）':'（未見上限'+w.unseenCapacity+'）')).join('・')||'なし');
+      const legality='待ちの内在役 '+(info.hasYakuWait?'あり':'なし')+'（確定立直含む・ロン機会は別判定） / フリテン '+(info.furiten.unknownHistory?'履歴UNKNOWN・ロンHOLD':info.furiten.blocked?'あり':'なし')+' / 他家手牌UNKNOWN';
+      const conflict=info.foldDefense?'守備根拠とテンパイ損失':info.pushPull?'テンパイ維持と安全性UNKNOWN':info.selectedLowersValue?'役維持と価値牌減少':info.keepScore?'価値牌維持・安全性は別':'速度・打点・安全を別に比較';
+      const roles=DIALOGUE_FAMILIES[info.family].map(r=>r.slice());
+      roles[1][1]+=' '+(info.keepsTenpai?'テンパイ維持。':info.breaksTenpai?'テンパイ崩れ。':'向聴'+info.shanten+'。');
+      roles[2][1]+=(info.multipleSafe?' 候補は複数、根拠の相手を比べる。':'');
+      if(info.family==='FAM_FOLD_DEFENSE'&&!info.allObserved&&!info.riichiOnly)roles[0][2]='INFERRED';
+      const observed=info.allObserved?'三家各自の河に同牌':info.riichiOnly?'指定リーチ者の河に同牌':info.evidenceAtoms.length?info.evidenceAtoms.map(a=>a.kind+': '+a.sourceTiles.map(i=>DEF_MAP[C.TYPES[i]].name).join('・')).join(' / '):'手牌と河を観測。安全根拠未出';
+      const availability=game.players[0].riichi&&!selected.drawn?'立直固定 / 自摸牌以外は切牌不可':'HUMAN_DECISION / 切牌可能';
+      return {variant:info.variant,family:info.family,signature:info.signature,classification:info,states:[selected.name+': '+observed,handState+' / '+evidence,legality,conflict,availability],roles};
+    }
+
+    function benevolentRoleData(selected,info){
+      return {variant:info.variant,family:info.family,signature:info.signature,classification:info,benevolent:true,states:[selected.name+': 弱い安全根拠を複数観測','根拠は独立して表示','UNKNOWNを維持し安全確定へ昇格しない','善意合成注意 / 操作継続可能','HUMAN_DECISION / 切牌可能'],roles:[
+        ['職長','材料が二つあっても、安全確定じゃないぞ','INFERRED','善意合成注意'],
+        ['図面担当','根拠は別々。UNKNOWNは残す','UNKNOWN','昇格禁止'],
+        ['若手作業者','安全そう、を安全確定にはしない','HUMAN','比較中']
+      ]};
+    }
+    function clearBenevolentEvent(clearSeen=false){
+      if(benevolentEventTimer!==null)window.clearTimeout(benevolentEventTimer);
+      benevolentEventTimer=null;benevolentEventState=null;if(clearSeen)benevolentEventSeen.clear();
+    }
+    function benevolentTriggerSatisfied(info){return info.safetyUnknown&&info.independentAtoms.length>=2&&!info.allObserved}
+    function maybeTriggerBenevolentEvent(selected){
+      clearBenevolentEvent(false);const info=classifyCandidate(selected);
+      if(!benevolentTriggerSatisfied(info))return false;
+      const evidenceSignature=info.independentAtoms.map(a=>a.id).sort().join('+');const key=[mode,game.turn,selected.uid,evidenceSignature].join('|');
+      if(benevolentEventSeen.has(key))return false;
+      benevolentEventSeen.add(key);benevolentEventState={selectedUid:selected.uid,evidenceSignature,info};
+      benevolentEventTimer=later(()=>{benevolentEventTimer=null;benevolentEventState=null;statusMessage='三役判断と状態分離を確認できます。';renderAll()},900);
+      return true;
+    }
+
+    function roleData(selected){
+      if(game?.terminal)return {variant:'RESULT_REVIEW',states:['終局結果と点棒移動を表示','役・翻・符・支払いを別々に確認','人間の受入は未署名','結果確認と次局選択は別の判断','HUMAN_DECISION / 次局または同局やり直し'],roles:[['職長','終局だ。結果を確認しよう。','OBSERVED','結果確認'],['図面担当','役・翻符・支払いを別々に照査する。','CALCULATED','点数照査'],['若手作業者','次局か、やり直しか、自分で決める。','HUMAN','選択待ち']]};
+      if(game?.pendingRon){const p=game.pendingRon,e=p.candidates[0].evaluation;return {variant:'HUMAN_RON_CHOICE',states:['他家の実際の打牌 '+p.tile.name,'ロン役あり '+e.han+'翻 '+e.fu+'符','他家の隠れた待ちはUNKNOWN','和了と見逃しを比較。見逃し後のフリテンを確認','HUMAN_DECISION / ロンまたは見逃し'],roles:[['職長','ロンできる。見逃すこともできる。','OBSERVED','和了機会'],['図面担当','役・フリテン条件を確認済み。見逃しは履歴に残る。','CALCULATED','合法性'],['若手作業者','和了するかは、人間が決める。','HUMAN','選択待ち']]};}
+
+      if(mode==='tutorial'&&!selected)return {
+        variant:'SINGLE_SCENE_READY',
+        states:[
+          '一萬は三家の河で観測済み',
+          '現物・スジ・壁・手牌構造は別々の根拠',
+          '対面待ち・下家伏せ手・五索安全性はUNKNOWN',
+          '弱い根拠を足して安全確定へ昇格しない',
+          '牌を選んで比較し、人間が最後に切る'
+        ],
+        roles:[
+          ['職長','見える物と見えない物を分けろ','OBSERVED','比較開始'],
+          ['図面担当','根拠は別欄のまま比べる','UNKNOWN','合成禁止'],
+          ['若手作業者','最後に切るのは自分だ','HUMAN','選択待ち']
+        ]
+      };
+      if(mode==='normal'&&!selected)return {variant:'NORMAL_DYNAMIC_READY',states:['自家手牌・公開河・巡目を観測','候補牌ごとに手牌構造を再計算','他家の手牌・待ち・意図はUNKNOWN','速度・打点・安全を別々に比較','牌を選ぶと三役が反応'],roles:[
+        ['職長','牌を選べ。公開情報から見る。','OBSERVED','選択待ち'],['図面担当','候補ごとに構造を再計算する。','CALCULATED','選択待ち'],['若手作業者','最後は自分で切る。','HUMAN','選択待ち']
+      ]};
+      if(selected&&benevolentEventState&&benevolentEventState.selectedUid===selected.uid)return benevolentRoleData(selected,benevolentEventState.info);
+      if(mode==='normal'&&selected)return dialogueForClassification(selected,classifyCandidate(selected));
+
+
+      if(selected)return dialogueForClassification(selected,classifyCandidate(selected));
+      return {variant:'SINGLE_SCENE_CONTINUE',states:['自家手牌と公開情報を観測','候補牌ごとに手牌構造を再計算','他家の手牌・待ちはUNKNOWN','速度・打点・安全を別々に比較','牌を選んで判断を継続'],roles:[
+        ['職長','次の牌を選べ。','OBSERVED','選択待ち'],
+        ['図面担当','公開情報から再計算する。','CALCULATED','選択待ち'],
+        ['若手作業者','最後は自分で切る。','HUMAN','選択待ち']
+      ]};
+    }
+    function roleHtml(role,selected){
+      return '<div class="role-talk"><div class="speech-line">'+role[1]+'</div><div class="speech-tags"><span class="tag">'+role[2]+'</span><span class="tag">'+role[3]+'</span></div></div>';
+    }
+    function renderFacts(){
+      const tutorial=mode==='tutorial';document.getElementById('factsTitle').textContent=tutorial?'Rev.4観測局面 / 補完範囲はHOLD':'通常局・公開状態';
+      document.getElementById('factOne').textContent=(tutorial?'固定開始 東1局11巡目。対面10巡目リーチ。省略履歴36枚UNKNOWN。':'通常局 seed '+game.seed+'。')+'供託 '+game.pool+'点 / '+game.honba+'本場';
+      document.getElementById('factTwo').textContent='ドラ表示 '+DEF_MAP[game.doraIndicator].name+' → '+DEF_MAP[game.doraType].name+(tutorial?'。下家の公開ボーナスはドラ1＋赤1＝2（総翻数とは別）。':'。136枚の物理IDを保存。');
+      document.getElementById('factThree').textContent=(tutorial?'下家伏せ手・上家の省略河はUNKNOWN。':'他家手牌・待ちはUNKNOWN。')+'ルール R001 / 鳴き・カン未対応。'+(tutorial?'ロン局所HOLD・ツモ可。':'立直・ロン・ツモ可。');
+      document.getElementById('fixtureFact').textContent='';
+    }
+
+    function renderMini(targetId,items){const target=document.getElementById(targetId);target.innerHTML='';items.forEach(item=>{const mark=document.createElement('span');mark.className='mini'+(item.red?' red':'')+(item.riichiDeclaration?' riichi-mark':'');mark.textContent=item.glyph;mark.setAttribute('aria-label',item.name);target.appendChild(mark)})}
+    function renderScene(){
+      const tutorial=mode==='tutorial';const self=game.players[0];
+      document.getElementById('modeTag').textContent=tutorial?'チュートリアルモード':'通常モード';
+      document.getElementById('turnTag').textContent=SEATS[game.roundWind]+game.roundNumber+'局 '+game.turn+'巡目 / 山'+game.liveWall.length;
+      document.getElementById('phaseTag').textContent=game.phase;document.getElementById('selfScoreTag').textContent='自家 '+game.players[0].score+'点';
+      document.getElementById('boardTitle').textContent=(tutorial?'Phase-01固定局面':'通常局')+' / '+(game.terminal?'終局':'進行中');
+      document.getElementById('topRiverTitle').textContent='対面・'+SEATS[R.seatWind(game,2)]+' / '+game.players[2].score+'点'+(game.players[2].riichi?' リーチ':'');
+      document.getElementById('leftRiverTitle').textContent='上家・'+SEATS[R.seatWind(game,3)]+' / '+game.players[3].score+'点'+(game.players[3].riichi?' リーチ':'');
+      document.getElementById('rightRiverTitle').textContent='下家・'+SEATS[R.seatWind(game,1)]+' / '+game.players[1].score+'点'+(game.players[1].riichi?' リーチ':'')+(game.players[1].openMelds.length?' 副露'+game.players[1].openMelds.length:'');
+      document.getElementById('leftRiverNote').textContent=tutorial?'省略河: UNKNOWN':'';document.getElementById('leftRiverNote').classList.toggle('hidden',!tutorial);
+      renderMini('topRiverTiles',game.players[2].river);renderMini('leftRiverTiles',game.players[3].river);renderMini('rightRiverTiles',game.players[1].river);
+      const meldTarget=document.getElementById('rightMelds');meldTarget.innerHTML='';game.players[1].openMelds.forEach(meld=>{const row=document.createElement('span');row.className='meld';meld.tiles.forEach(item=>{const mark=document.createElement('span');mark.className='mini'+(item.red?' red':'')+(item.riichiDeclaration?' riichi-mark':'');mark.textContent=item.glyph;mark.setAttribute('aria-label',item.name);row.appendChild(mark)});meldTarget.appendChild(row)});
+      const river=document.getElementById('playerRiver');river.textContent=self.river.length?'自家 河':'自家 打牌なし';self.river.forEach(item=>{const mark=document.createElement('span');mark.className='mini'+(item.red?' red':'')+(item.riichiDeclaration?' riichi-mark':'');mark.textContent=item.glyph;mark.setAttribute('aria-label',item.name);river.appendChild(mark)});
+      const selected=currentTile();document.getElementById('selectedTag').textContent=selected?selected.glyph+' '+selected.name:'牌を選択';
+      const visibleSafeCandidates=game.players[0].hand.filter(isSafeCandidateVisual).length;
+      const safeCandidateNote=(mode==='tutorial'&&!game.terminal)?(' / 現物候補強調 '+visibleSafeCandidates+'枚'):'';
+      document.getElementById('centerNote').textContent=statusMessage+safeCandidateNote;
+    }
+    function renderHand(){
+      const target=document.getElementById('hand');const items=game.players[0].hand;target.innerHTML='';target.style.setProperty('--hand-size',String(Math.max(1,items.length)));target.setAttribute('aria-label','自家手牌'+items.length+'枚');
+      items.forEach(item=>{const button=document.createElement('button');button.type='button';
+        button.className='tile'+(item.red?' red':'')+(item.drawn?' drawn':'')+(isSafeCandidateVisual(item)?' tutorial-safe-candidate':'');button.disabled=game.terminal||busy||!!game.pendingRon;button.setAttribute('role','listitem');button.setAttribute('aria-label',item.name+'を選択'+(isSafeCandidateVisual(item)?'・公開河に基づく現物候補':''));button.setAttribute('aria-pressed',String(item.uid===selectedId));button.innerHTML='<span class="glyph">'+item.glyph+'</span><span class="name">'+item.name+'</span>';button.addEventListener('click',()=>selectTile(item.uid));
+        target.appendChild(button)});
+      const discardBtn=document.getElementById('discardBtn');
+      const holdBtn=document.getElementById('holdBtn');
+      const tsumoBtn=document.getElementById('tsumoBtn');
+      discardBtn.disabled=game.terminal||busy||!!game.pendingRon||!currentTile()||(selfRiichiLocked());
+      holdBtn.disabled=game.terminal||busy||!!game.pendingRon;
+      tsumoBtn.disabled=game.terminal||busy||!game.humanTsumo;
+      document.getElementById('resetBtn').textContent='同局をやり直す';document.getElementById('nextRoundBtn').disabled=!game.terminal;document.getElementById('ronBtn').disabled=!game.pendingRon||game.terminal;document.getElementById('passRonBtn').disabled=!game.pendingRon||game.terminal;document.getElementById('riichiBtn').disabled=!R.canRiichi(game,0,currentTile())||busy;document.getElementById('riichiBtn').textContent=riichiPending?'立直宣言予定 / 切るで確定':'立直を宣言';
+    }
+    function pulseRoleCards(){
+      const cards=[...document.querySelectorAll('.roles .role')];
+      cards.forEach((card,index)=>{
+        card.classList.remove('speaking');
+        void card.offsetWidth;
+        later(()=>card.classList.add('speaking'),index*70);
+        later(()=>card.classList.remove('speaking'),420+index*70);
+      });
+    }
+    function renderStates(){
+      const selected=currentTile();const info=roleData(selected);
+      const rolesPanel=document.querySelector('.roles');
+      if(rolesPanel){
+        const classification=info.classification||null;
+        rolesPanel.dataset.dialogueVariant=info.variant||'DYNAMIC_FALLBACK';
+        rolesPanel.dataset.dialogueFamily=info.family||((info.variant||'').split('__')[0]||'DYNAMIC_FALLBACK');
+        rolesPanel.dataset.variantSignature=info.signature||((info.variant||'').split('__')[1]||'READY');
+        rolesPanel.dataset.comparisonFamily=classification&&classification.multipleSafe?'FAM_MULTIPLE_SAFE_COMPARE':'';
+        rolesPanel.dataset.benevolentEvent=info.benevolent?'ACTIVE':'INACTIVE';
+      }
+      document.getElementById('obsText').textContent=info.states[0];document.getElementById('infText').textContent=info.states[1];document.getElementById('unkText').textContent=info.states[2];document.getElementById('confText').textContent=info.states[3];
+      document.getElementById('holdText').textContent=holdActive?'HOLD助言表示中・切牌操作は有効 / '+info.states[4]:info.states[4];document.getElementById('humanText').textContent='最終判断: '+(game.lastAction||'未操作');
+      document.getElementById('roleForeman').innerHTML=roleHtml(info.roles[0],selected);document.getElementById('roleDrawing').innerHTML=roleHtml(info.roles[1],selected);document.getElementById('roleJunior').innerHTML=roleHtml(info.roles[2],selected);
+    }
+    function renderBenevolentEvent(){
+      const target=document.getElementById('benevolentEvent');const active=!!benevolentEventState;
+      target.classList.toggle('hidden',!active);
+      target.dataset.evidenceSignature=active?benevolentEventState.evidenceSignature:'';
+      target.dataset.safetyUnknown=active?'true':'';
+      target.dataset.safeConfirmed=active?'false':'';
+      target.textContent=active?'善意合成注意 / UNKNOWNは安全確定へ昇格しません':'善意合成注意';
+    }
+    function renderProgress(){
+      const active=PHASE_INDEX[game.phase]??0;const target=document.getElementById('roundProgress');target.innerHTML='';PROGRESSION.forEach((label,index)=>{const item=document.createElement('span');item.textContent=label;if(index<=active)item.className='active';target.appendChild(item)});document.getElementById('resultPhase').textContent=game.phase;
+    }
+    function setScoreRow(prefix,start,delta,end){document.getElementById(prefix+'Start').textContent=start;document.getElementById(prefix+'Delta').textContent=delta;document.getElementById(prefix+'End').textContent=end}
+    function resetResult(){
+      document.querySelector('.result-panel').classList.add('hidden');document.querySelector('.footer').classList.add('no-result');
+      document.getElementById('resultStatus').textContent='結果待機';document.getElementById('resultType').textContent='未確定';document.getElementById('resultWinner').textContent='未確定';document.getElementById('resultLoser').textContent='未確定';document.getElementById('resultTile').textContent='未確定';document.getElementById('resultYaku').textContent='未確定';document.getElementById('resultHan').textContent='未確定';document.getElementById('resultFu').textContent='未確定';document.getElementById('resultLimit').textContent='未確定';document.getElementById('resultHonba').textContent=game.honba+'本場';document.getElementById('resultPool').textContent=(game.pool/1000)+'本';document.getElementById('resultPayment').textContent='未確定';document.getElementById('scoreSource').textContent='共通engineが実局面から計算。HTML固定点数なし。';
+      ['east','south','west','north'].forEach((prefix,index)=>setScoreRow(prefix,game.initialScores[index],'-',game.players[index].score));
+    }
+    function renderResult(){
+      const panel=document.querySelector('.result-panel');const footer=document.querySelector('.footer');
+      if(!game.result){panel.classList.add('hidden');footer.classList.add('no-result');document.getElementById('resultPhase').textContent=game.phase;return}
+      panel.classList.remove('hidden');footer.classList.remove('no-result');
+      const result=game.result;document.getElementById('resultStatus').textContent='RESULT_CONFIRMED';document.getElementById('resultType').textContent=result.type;document.getElementById('resultWinner').textContent=result.winner===null?'なし':SEATS[R.seatWind(game,result.winner)]+'家';document.getElementById('resultLoser').textContent=result.loser===null?'なし':SEATS[R.seatWind(game,result.loser)]+'家';document.getElementById('resultTile').textContent=result.tile?result.tile.glyph+' '+result.tile.name:'なし';document.getElementById('resultYaku').textContent=result.yaku.length?result.yaku.map(item=>item.name).join(' / '):'該当なし';document.getElementById('resultHan').textContent=result.han===null?'-':result.han+'翻';document.getElementById('resultFu').textContent=result.fu===null?'-':result.fu+'符';document.getElementById('resultLimit').textContent=result.limit||'-';document.getElementById('resultHonba').textContent=result.honba+'本場';document.getElementById('resultPool').textContent=(result.poolBefore/1000)+'本 → '+(game.pool/1000)+'本';document.getElementById('resultPayment').textContent=result.payment;document.getElementById('scoreSource').textContent=result.provenance+' / ledger invariant: '+(result.ledgerPass?'PASS':'FAIL');
+      ['east','south','west','north'].forEach((prefix,index)=>setScoreRow(prefix,result.before[index],(result.delta[index]>=0?'+':'')+result.delta[index],result.after[index]));
+    }
+    function renderAll(message){document.querySelectorAll('.score-table tbody tr').forEach((tr,i)=>tr.firstElementChild.textContent=SEATS[R.seatWind(game,i)]+'・'+['自家','下家','対面','上家'][i]);if(message)statusMessage=message;renderFacts();renderScene();renderHand();renderStates();renderBenevolentEvent();renderProgress();renderResult()}
+
+    function selfRiichiLocked(){const p=game.players[0],t=currentTile();return p.riichi&&!!t&&!t.drawn;}
+    function ended(){if(!game?.terminal)return;cancelRound();busy=false;selectedId=null;riichiPending=false;sound.play(game.result.type==='流局'?'draw':game.result.type==='放銃'?'dealIn':'win');later(()=>sound.play('result'),150);renderAll(game.result.type+'。役・翻符・支払いを別々に確認できます。');}
+    function advanceSeat(seat,alreadyDrawn=false){
+      if(!game||game.terminal||game.pendingRon)return;
+      if(!alreadyDrawn){if(game.liveWall.length===0){R.exhaustive(game);ended();return;}R.draw(game,seat);}
+      if(seat===0){game.turn=mode==='tutorial'?game.turn+1:game.players[0].drawCount;busy=false;holdActive=false;renderAll(game.humanTsumo?'ツモ和了可能です。':'次巡。公開河と手牌を再計算してください。');return;}
+      busy=true;const e=R.tsumo(game,seat);if(e){R.finishWin(game,e,seat,null);ended();return;}
+      const id=R.aiDiscard(game,seat),t=game.players[seat].hand.find(x=>x.id===id),declare=R.canRiichi(game,seat,t);
+      const outcome=R.discard(game,seat,id,{riichi:declare});sound.play('discard');
+      if(game.terminal){ended();return;}if(game.pendingRon){busy=false;renderAll('ロン可能。ロンまたは見逃しを人間が選択します。');return;}
+      renderAll(SEATS[R.seatWind(game,seat)]+'家が打牌しました。');later(()=>advanceSeat(outcome.next),180);
+    }
+    function evaluatePlayerTsumo(seat){return R.tsumo(game,seat)}
+    function claimRon(){if(R.claimRon(game))ended();}
+    function passRon(){const outcome=R.pass(game);if(!outcome)return;if(game.terminal){ended();return;}busy=true;renderAll('ロンを見逃し。自摸まで一時フリテン、立直後は局終了までフリテン。');later(()=>advanceSeat(outcome.next),160);}
+    function declareRiichi(){if(R.canRiichi(game,0,currentTile())){riichiPending=!riichiPending;renderAll('立直は選択牌の切牌時に確定します。人間が最後に決定します。');}}
+    function nextRound(){if(!game.terminal)return;if(mode==='tutorial'){initTutorial();return;}const next=R.next(game,configuredSeed());cancelRound();fixedStartComparisonActive=false;activate(next,'次局。点数・供託・本場・親を引き継ぎました。');}
+
+    async function selectTile(id){
+      const e=epoch;await unlockSoundSafe();if(e!==epoch||!game)return;if(game.terminal||busy){sound.play('invalid');renderAll('現在は牌を選択できません。');return}
+      const deselect=selectedId===id;riichiPending=false;selectedId=deselect?null:id;game.phase='JUDGMENT';game.lastAction=deselect?'選択解除':'牌選択';sound.play(deselect?'deselect':'select');
+      if(deselect)clearBenevolentEvent(false);else maybeTriggerBenevolentEvent(currentTile());
+      renderAll(deselect?'選択を解除しました。':benevolentEventState?'善意合成注意。UNKNOWNを維持したまま操作できます。':'三役判断と状態分離を確認できます。');if(!deselect)pulseRoleCards()
+    }
+    async function holdDecision(){
+      const e=epoch;await unlockSoundSafe();if(e!==epoch||!game)return;
+      if(game.terminal||busy||!currentTile()){sound.play('invalid');renderAll('牌を選んでからHOLDを確認してください。');return}
+      holdActive=true;game.phase='HOLD_ADVISORY';game.lastAction='HOLD助言を表示';sound.play('hold');
+      renderAll('HOLDは助言です。選択牌と「切る」は有効なままです。')
+    }
+    async function discardSelected(){
+      const e=epoch;await unlockSoundSafe();if(e!==epoch||!game||game.terminal||busy)return;const selected=currentTile();if(!selected)return;
+      const outcome=R.discard(game,0,selected.id,{riichi:riichiPending});if(!outcome.ok){sound.play('invalid');renderAll(outcome.reason==='RIICHI_TSUMOGIRI_REQUIRED'?'立直後は自摸牌のみ切牌できます。':'現在は切牌できません。');return;}
+      selectedId=null;holdActive=false;busy=true;riichiPending=false;fixedStartComparisonActive=false;clearBenevolentEvent(false);sound.play('discard');if(game.terminal){ended();return;}renderAll(selected.name+'を切牌。他家進行へ移ります。');later(()=>advanceSeat(outcome.next),180);
+    }
+    async function claimTsumo(){const e=epoch;await unlockSoundSafe();if(e!==epoch||!game||busy)return;const value=R.tsumo(game,0);if(value&&R.finishWin(game,value,0,null))ended();}
+    async function resetRound(){const e=epoch;await unlockSoundSafe();if(e!==epoch||!game)return;sound.play('reset');if(mode==='tutorial')initTutorial();else{const old=game;cancelRound();activate(R.normal(old.seed,{scores:old.initialScores,pool:old.initialPool,honba:old.honba,roundWind:old.roundWind,roundNumber:old.roundNumber,dealer:old.dealer}),'同じseedと開始点数から同局をやり直しました。');}}
+
+    async function chooseMode(nextMode){
+      await unlockSoundSafe();document.getElementById('modeGate').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bgmToggle').checked=false;sound.setBgm(false);mode=nextMode;if(nextMode==='tutorial')initTutorial();else initNormal();sound.play('transition')
+    }
+    function returnToModes(){cancelRound();mode=null;game=null;fixedStartComparisonActive=false;sound.setBgm(false);document.getElementById('bgmToggle').checked=false;document.getElementById('app').classList.add('hidden');document.getElementById('modeGate').classList.remove('hidden');sound.play('transition')}
+
+    document.getElementById('tutorialModeBtn').addEventListener('click',()=>chooseMode('tutorial'));
+    document.getElementById('normalModeBtn').addEventListener('click',()=>chooseMode('normal'));
+    document.getElementById('modeBackBtn').addEventListener('click',returnToModes);
+    document.getElementById('discardBtn').addEventListener('click',discardSelected);
+    document.getElementById('holdBtn').addEventListener('click',holdDecision);
+    document.getElementById('tsumoBtn').addEventListener('click',claimTsumo);
+    document.getElementById('ronBtn').addEventListener('click',claimRon);
+    document.getElementById('passRonBtn').addEventListener('click',passRon);
+    document.getElementById('riichiBtn').addEventListener('click',declareRiichi);
+    document.getElementById('nextRoundBtn').addEventListener('click',nextRound);
+    document.getElementById('resetBtn').addEventListener('click',resetRound);
+    document.getElementById('gameSoundToggle').addEventListener('change',async event=>{await unlockSoundSafe();sound.setGameSound(event.target.checked)});
+    document.getElementById('bgmToggle').addEventListener('change',async event=>{await unlockSoundSafe();sound.setBgm(event.target.checked)});
+    document.getElementById('regressionResult').textContent='旧点数算術例（牌理証明外）: '+(scoreRegression.pass?'PASS':'FAIL')+' / 南22000・東-13000（局結果へ流用なし）';
+    window.__yamrailScoringDiagnostics={sourceBound:true,sourceId:C.PROFILE.id,sharedEngine:true,ceil100,calculateBasePoints,calculatePoints,evaluateHand,regression:scoreRegression};
+    window.__yamrailAudioDiagnostics={bgmDefault:'OFF',bgmOnlyToggle:true,buses:['BGM_BUS','GAME_SOUND_BUS'],gameSoundContents:['ambient','select','deselect','discard','hold','reset','transition','result','invalid','win','dealIn','draw'],gameSoundIndependentFromBgm:true,get eventsPlayed(){return sound.eventsPlayed.slice()}};
+    window.__yamrailDialogueDiagnostics={
+      families:Object.keys(DIALOGUE_FAMILIES),variantFormat:'SAFETY_SCOPE-HAND_STATE-VALUE_STATE-CONFLICT_STATE-UNKNOWN_SCOPE',eventDurationMs:900,eventPromotionToSafeConfirmed:false,
+      getCandidates:()=>game?game.players[0].hand.map(item=>{const info=classifyCandidate(item);return {uid:item.uid,type:item.type,name:item.name,family:info.family,signature:info.signature,variant:info.variant,weakEvidence:info.weakEvidence.slice(),safetyUnknown:info.safetyUnknown,safeConfirmed:info.safeConfirmed,multipleSafeComparison:info.multipleSafe,benevolentEligible:benevolentTriggerSatisfied(info)}}):[],
+      getEventState:()=>({active:!!benevolentEventState,seenCount:benevolentEventSeen.size,evidenceSignature:benevolentEventState?benevolentEventState.evidenceSignature:null})
+    };
+    window.__yamrailRuntimeDiagnostics={tutorialStructure:'SINGLE_SCENE_REPETITIVE_INTERACTIVE',modes:['tutorial','normal'],normalFixedScenario:false,multipleSafe:'COMPARISON_LAYER_ONLY',safeCandidateVisualMeaning:'HUMAN_COMPARISON_CUE',getState:()=>game?{ruleProfile:C.PROFILE.id,seed:game.seed,replayHashes:game.replayHashes,conservation:C.conservation(game),scopeHolds:game.scopeHolds,riichi:game.players[0].riichi,ronChoice:!!game.pendingRon,epoch,pendingTimers:turnTimers.size,mode,phase:game.phase,terminal:game.terminal,handCount:game.players[0].hand.length,turn:game.turn,wallCount:game.liveWall.length,selectedId,holdActive,busy,fixedStartComparisonActive,result:game.result?{type:game.result.type,han:game.result.han,fu:game.result.fu,limit:game.result.limit,ledgerPass:game.result.ledgerPass,delta:game.result.delta,after:game.result.after}:null,bgmEnabled:sound.bgmEnabled,gameSoundEnabled:sound.gameSoundEnabled,gameSoundStarted:sound.started}: {mode:null,phase:'MODE_SELECT'}};
+    window.__yamrailRepairDiagnostics={getGame:()=>game,render:renderAll,selectTile,chooseMode,returnToModes,discardSelected,holdDecision,claimTsumo,claimRon,passRon,resetRound,nextRound,declareRiichi,classifyCandidate,roleData,benevolentTriggerSatisfied,advanceSeat,getEpoch:()=>epoch};
+  })();
+  </script>
+</body>
 </html>
